@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <script>
+      // Sandbox compatibility: silently intercept attempts to redefine window.fetch
+      // (triggered by motion/react in sandboxed iframe environments)
+      (function() {
+        try {
+          var _realFetch = window.fetch;
+          Object.defineProperty(window, 'fetch', {
+            get: function() { return _realFetch; },
+            set: function(val) {
+              // Silently ignore reassignment attempts in sandboxed environments
+              // while keeping original fetch functional
+            },
+            configurable: true
+          });
+        } catch (e) {
+          // If defineProperty itself fails, add a global error suppressor
+          window.addEventListener('error', function(event) {
+            if (event.message && event.message.indexOf('fetch') !== -1 &&
+                event.message.indexOf('getter') !== -1) {
+              event.preventDefault();
+              event.stopPropagation();
+              return false;
+            }
+          }, true);
+        }
+      })();
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AudioBay - Báo giá bản quyền nhạc nền chuyên nghiệp</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+

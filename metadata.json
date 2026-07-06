@@ -1,0 +1,6 @@
+{
+  "name": "AudioBay Pricing V2",
+  "description": "Nền tảng báo giá nhạc nền bản quyền thương mại cho doanh nghiệp Việt Nam",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

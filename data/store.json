@@ -1,0 +1,1278 @@
+{
+  "company": {
+    "address": "Việt Nam",
+    "email": "label@audiobay.net",
+    "website": "audiobay.vn",
+    "phone": "0969 224 334",
+    "name": "AudioBay"
+  },
+  "faqs": [
+    {
+      "a": "Có. AudioBay sở hữu hoặc được cấp phép toàn bộ 20.000+ bài nhạc trong thư viện. Khi doanh nghiệp sử dụng dịch vụ, chúng tôi cấp Giấy phép Sử dụng Nhạc kèm theo hợp đồng.",
+      "q": "AudioBay có giấy phép bản quyền không?"
+    },
+    {
+      "a": "Có. AudioBay cung cấp 14 ngày dùng thử miễn phí, không cần thẻ tín dụng. Liên hệ label@audiobay.net để được kích hoạt.",
+      "q": "Tôi có thể dùng thử trước khi mua không?"
+    },
+    {
+      "a": "Có. Toàn bộ nhạc trong thư viện AudioBay đều do AudioBay tự sáng tác, đầu tư sản xuất và sở hữu độc quyền - không qua nghệ sĩ hay bên thứ ba trung gian. Điều này đồng nghĩa AudioBay có toàn quyền cấp phép sử dụng hợp pháp cho khách hàng doanh nghiệp, tuân thủ Luật Sở hữu trí tuệ Việt Nam.",
+      "q": "Giấy phép của AudioBay có tuân thủ đúng pháp luật Việt Nam không?"
+    },
+    {
+      "a": "Mỗi zone là một khu vực phát nhạc độc lập trong địa điểm của bạn. Ví dụ: một cửa hàng có khu trưng bày và khu thanh toán cần 2 zones để phát nhạc khác nhau.",
+      "q": "Zone âm thanh là gì?"
+    },
+    {
+      "a": "Hoàn toàn có thể. Bạn có thể nâng cấp gói bất kỳ lúc nào. Khi nâng cấp, phần chênh lệch sẽ được tính theo ngày sử dụng thực tế.",
+      "q": "Tôi có thể thay đổi gói sau khi đã đăng ký không?"
+    },
+    {
+      "a": "AudioBay chấp nhận chuyển khoản ngân hàng, thẻ tín dụng/ghi nợ, và thanh toán qua ví điện tử (MoMo, ZaloPay). Hóa đơn VAT được xuất theo yêu cầu.",
+      "q": "Hình thức thanh toán nào được chấp nhận?"
+    },
+    {
+      "a": "Gói Business trở lên cho phép tạo playlist tùy chỉnh theo thương hiệu. Gói Professional và Enterprise còn có dịch vụ curation nhạc chuyên nghiệp.",
+      "q": "Tôi có thể tùy chỉnh danh sách nhạc không?"
+    },
+    {
+      "a": "Bạn đăng ký theo số lượng địa điểm và nhận chiết khấu tự động từ 2 địa điểm trở lên. Từ 5 địa điểm, liên hệ label@audiobay.net để nhận báo giá đặc biệt.",
+      "q": "Doanh nghiệp có nhiều chi nhánh thì đăng ký như thế nào?"
+    }
+  ],
+  "packages": {
+    "features": [
+      {
+        "order": 1,
+        "id": "2",
+        "tierFrom": "starter",
+        "content": "Giấy phép bản quyền sử dụng nhạc"
+      },
+      {
+        "id": "10",
+        "order": 2,
+        "tierFrom": "business",
+        "content": "Playlist tùy chỉnh theo thương hiệu"
+      },
+      {
+        "content": " Phát nhạc không giới hạn theo giấy phép",
+        "tierFrom": "starter",
+        "id": "1",
+        "order": 3
+      },
+      {
+        "tierFrom": "starter",
+        "content": "Cập nhật nhạc mới hàng tuần",
+        "id": "4",
+        "order": 4
+      },
+      {
+        "id": "7",
+        "order": 5,
+        "tierFrom": "business",
+        "content": "Phát nhạc linh hoạt trên trình duyệt web"
+      },
+      {
+        "order": 6,
+        "id": "5",
+        "tierFrom": "starter",
+        "content": "20.000+ bài nhạc độc quyền AudioBay"
+      },
+      {
+        "tierFrom": "starter",
+        "hidden": true,
+        "content": "Không lo Content ID claim trên mạng xã hội",
+        "id": "3",
+        "order": 8
+      },
+      {
+        "order": 7,
+        "id": "6",
+        "tierFrom": "starter",
+        "content": "Hỗ trợ kỹ thuật trong giờ hành chính"
+      },
+      {
+        "hidden": true,
+        "content": "Dashboard web quản lý từ xa",
+        "tierFrom": "business",
+        "id": "8",
+        "order": 9
+      },
+      {
+        "order": 10,
+        "hidden": true,
+        "content": "Lập lịch phát nhạc tự động theo khung giờ",
+        "tierFrom": "business",
+        "id": "9"
+      },
+      {
+        "id": "11",
+        "tierFrom": "professional",
+        "hidden": true,
+        "content": "Quản lý nhiều khu vực âm thanh (multi-zone)",
+        "order": 11
+      },
+      {
+        "order": 12,
+        "tierFrom": "professional",
+        "hidden": true,
+        "content": "Hỗ trợ kỹ thuật ưu tiên — phản hồi trong 8 giờ",
+        "id": "12"
+      },
+      {
+        "hidden": true,
+        "content": "Hỗ trợ kỹ thuật 24/7 — phản hồi trong 4 giờ",
+        "tierFrom": "enterprise",
+        "id": "13",
+        "order": 13
+      },
+      {
+        "tierFrom": "enterprise",
+        "hidden": true,
+        "content": "Account Manager chuyên trách",
+        "id": "14",
+        "order": 14
+      },
+      {
+        "id": "15",
+        "tierFrom": "enterprise",
+        "hidden": true,
+        "content": "SLA cam kết uptime 99.9%",
+        "order": 15
+      }
+    ],
+    "cards": [
+      {
+        "subtitle": "Phù hợp với hộ kinh doanh cá thể, quán nhỏ dưới 50m²",
+        "highlighted": false,
+        "name": "STARTER",
+        "id": "starter",
+        "priceDisplay": "149.000",
+        "badge": "PHỔ BIẾN NHẤT",
+        "ctaText": "TÍNH GIÁ GÓI NÀY",
+        "color": "#6ee7b7"
+      },
+      {
+        "color": "#4ade80",
+        "ctaText": "TÍNH GIÁ GÓI NÀY",
+        "badge": "KHUYÊN DÙNG",
+        "priceDisplay": "449.000",
+        "id": "business",
+        "highlighted": true,
+        "subtitle": "Tối ưu cho quán vừa, chuỗi cửa hàng, spa chăm sóc chuyên nghiệp",
+        "name": "BUSINESS"
+      },
+      {
+        "color": "#818cf8",
+        "ctaText": "TÍNH GIÁ GÓI NÀY",
+        "badge": "",
+        "priceDisplay": "699.000",
+        "id": "professional",
+        "subtitle": "Dành cho không gian cao cấp, trung tâm thể thao, showroom lớn",
+        "highlighted": false,
+        "name": "PROFESSIONAL"
+      },
+      {
+        "color": "#f59e0b",
+        "ctaText": "YÊU CẦU TƯ VẤN RIÊNG",
+        "badge": "",
+        "priceDisplay": "LIÊN HỆ",
+        "id": "enterprise",
+        "subtitle": "Hệ thống khách sạn, resort, bệnh viện và siêu thị quy mô lớn",
+        "highlighted": false,
+        "name": "ENTERPRISE"
+      }
+    ]
+  },
+  "pricing": [
+    {
+      "inputType": "area",
+      "id": "cafe",
+      "icon": "☕",
+      "tiers": [
+        {
+          "id": "cafe-mini",
+          "name": "Mini / Take-away",
+          "notes": "Phù hợp quán nhỏ, take-away, kiosk",
+          "areaMax": 50,
+          "features": [
+            "Phát nhạc không giới hạn trong không gian được cấp phép",
+            "Giấy phép bản quyền đầy đủ, hồ sơ minh bạch",
+            "Không lo Content ID claim trên mạng xã hội",
+            "Cập nhật nhạc mới hàng tuần",
+            "20.000+ bài nhạc độc quyền AudioBay",
+            "Hỗ trợ kỹ thuật trong giờ hành chính"
+          ],
+          "zones": 1,
+          "area": "≤ 50 m²",
+          "price_month": 149000
+        },
+        {
+          "areaMax": 80,
+          "areaMin": 50,
+          "id": "cafe-small",
+          "area": "50 – 80 m²",
+          "zones": 1,
+          "name": "Cà phê nhỏ",
+          "notes": "Quán cà phê dưới 20 chỗ ngồi",
+          "price_month": 269000,
+          "features": [
+            "Phát nhạc không giới hạn trong không gian được cấp phép",
+            "Giấy phép bản quyền đầy đủ, hồ sơ minh bạch",
+            "Không lo Content ID claim trên mạng xã hội",
+            "Cập nhật nhạc mới hàng tuần",
+            "20.000+ bài nhạc độc quyền AudioBay",
+            "Hỗ trợ kỹ thuật trong giờ hành chính"
+          ]
+        },
+        {
+          "areaMin": 80,
+          "id": "cafe-medium",
+          "areaMax": 150,
+          "area": "80 – 150 m²",
+          "zones": 2,
+          "name": "Cà phê vừa",
+          "notes": "20–50 chỗ ngồi, có khu vực riêng biệt",
+          "features": [
+            "Phát nhạc không giới hạn trong không gian được cấp phép",
+            "Giấy phép bản quyền đầy đủ, hồ sơ minh bạch",
+            "Không lo Content ID claim trên mạng xã hội",
+            "Cập nhật nhạc mới hàng tuần",
+            "20.000+ bài nhạc độc quyền AudioBay",
+            "Hỗ trợ kỹ thuật trong giờ hành chính",
+            "App quản lý nhạc trên iOS & Android",
+            "Dashboard web quản lý từ xa",
+            "Lập lịch phát nhạc tự động theo khung giờ",
+            "Playlist tùy chỉnh theo thương hiệu"
+          ],
+          "price_month": 449000
+        },
+        {
+          "features": [
+            "Phát nhạc không giới hạn trong không gian được cấp phép",
+            "Giấy phép bản quyền đầy đủ, hồ sơ minh bạch",
+            "Không lo Content ID claim trên mạng xã hội",
+            "Cập nhật nhạc mới hàng tuần",
+            "20.000+ bài nhạc độc quyền AudioBay",
+            "Hỗ trợ kỹ thuật trong giờ hành chính",
+            "App quản lý nhạc trên iOS & Android",
+            "Dashboard web quản lý từ xa",
+            "Lập lịch phát nhạc tự động theo khung giờ",
+            "Playlist tùy chỉnh theo thương hiệu"
+          ],
+          "zones": 3,
+          "area": "> 150 m²",
+          "price_month": 619000,
+          "id": "cafe-large",
+          "areaMin": 150,
+          "name": "Cà phê lớn",
+          "notes": "Trên 50 chỗ, nhiều khu vực, có thể nhiều tầng"
+        }
+      ],
+      "name": "Cà phê & Trà sữa"
+    },
+    {
+      "inputType": "area",
+      "tiers": [
+        {
+          "area": "≤ 100 m²",
+          "features": [
+            "Phát nhạc không giới hạn trong không gian được cấp phép",
+            "Giấy phép bản quyền đầy đủ, hồ sơ minh bạch",
+            "Không lo Content ID claim trên mạng xã hội",
+            "Cập nhật nhạc mới hàng tuần",
+            "20.000+ bài nhạc độc quyền AudioBay",
+            "Hỗ trợ kỹ thuật trong giờ hành chính",
+            "App quản lý nhạc trên iOS & Android",
+            "Dashboard web quản lý từ xa",
+            "Lập lịch phát nhạc tự động theo khung giờ",
+            "Playlist tùy chỉnh theo thương hiệu"
+          ],
+          "zones": 2,
+          "price_month": 449000,
+          "name": "Nhà hàng nhỏ",
+          "notes": "Nhà hàng dưới 40 chỗ ngồi",
+          "id": "rest-small",
+          "areaMax": 100
+        },
+        {
+          "notes": "40–100 chỗ ngồi, có phòng VIP",
+          "name": "Nhà hàng vừa",
+          "features": [
+            "Phát nhạc không giới hạn trong không gian được cấp phép",
+            "Giấy phép bản quyền đầy đủ, hồ sơ minh bạch",
+            "Không lo Content ID claim trên mạng xã hội",
+            "Cập nhật nhạc mới hàng tuần",
+            "20.000+ bài nhạc độc quyền AudioBay",
+            "Hỗ trợ kỹ thuật trong giờ hành chính",
+            "App quản lý nhạc trên iOS & Android",
+            "Dashboard web quản lý từ xa",
+            "Lập lịch phát nhạc tự động theo khung giờ",
+            "Playlist tùy chỉnh theo thương hiệu"
+          ],
+          "price_month": 619000,
+          "id": "rest-medium",
+          "areaMin": 100,
+          "areaMax": 300,
+          "zones": 3,
+          "area": "100 – 300 m²"
+        },
+        {
+          "areaMax": 600,
+          "id": "rest-large",
+          "areaMin": 300,
+          "zones": 4,
+          "area": "300 – 600 m²",
+          "name": "Nhà hàng lớn",
+          "notes": "Trên 100 chỗ, nhiều khu vực riêng",
+          "price_month": 889000,
+          "features": [
+            "Phát nhạc không giới hạn trong không gian được cấp phép",
+            "Giấy phép bản quyền đầy đủ, hồ sơ minh bạch",
+            "Không lo Content ID claim trên mạng xã hội",
+            "Cập nhật nhạc mới hàng tuần",
+            "20.000+ bài nhạc độc quyền AudioBay",
+            "Hỗ trợ kỹ thuật trong giờ hành chính",
+            "App quản lý nhạc trên iOS & Android",
+            "Dashboard web quản lý từ xa",
+            "Lập lịch phát nhạc tự động theo khung giờ",
+            "Playlist tùy chỉnh theo thương hiệu",
+            "Quản lý nhiều khu vực âm thanh (multi-zone)",
+            "Hỗ trợ kỹ thuật ưu tiên — phản hồi trong 8 giờ"
+          ]
+        },
+        {
+          "notes": "Nhà hàng fine dining, sức chứa lớn",
+          "name": "Nhà hàng cao cấp",
+          "areaMin": 600,
+          "id": "rest-premium",
+          "price_month": 1339000,
+          "area": "> 600 m²",
+          "features": [
+            "Phát nhạc không giới hạn trong không gian được cấp phép",
+            "Giấy phép bản quyền đầy đủ, hồ sơ minh bạch",
+            "Không lo Content ID claim trên mạng xã hội",
+            "Cập nhật nhạc mới hàng tuần",
+            "20.000+ bài nhạc độc quyền AudioBay",
+            "Hỗ trợ kỹ thuật trong giờ hành chính",
+            "App quản lý nhạc trên iOS & Android",
+            "Dashboard web quản lý từ xa",
+            "Lập lịch phát nhạc tự động theo khung giờ",
+            "Playlist tùy chỉnh theo thương hiệu",
+            "Quản lý nhiều khu vực âm thanh (multi-zone)",
+            "Hỗ trợ kỹ thuật ưu tiên — phản hồi trong 8 giờ"
+          ],
+          "zones": 6
+        }
+      ],
+      "icon": "🍜",
+      "id": "restaurant",
+      "name": "Nhà hàng"
+    },
+    {
+      "inputType": "area",
+      "name": "Spa & Massage",
+      "tiers": [
+        {
+          "id": "spa-mini",
+          "name": "Spa nhỏ",
+          "notes": "Massage nhỏ, 1–3 phòng trị liệu",
+          "areaMax": 50,
+          "zones": 1,
+          "features": [
+            "Phát nhạc không giới hạn trong không gian được cấp phép",
+            "Giấy phép bản quyền đầy đủ, hồ sơ minh bạch",
+            "Không lo Content ID claim trên mạng xã hội",
+            "Cập nhật nhạc mới hàng tuần",
+            "20.000+ bài nhạc độc quyền AudioBay",
+            "Hỗ trợ kỹ thuật trong giờ hành chính"
+          ],
+          "area": "≤ 50 m²",
+          "price_month": 269000
+        },
+        {
+          "features": [
+            "Phát nhạc không giới hạn trong không gian được cấp phép",
+            "Giấy phép bản quyền đầy đủ, hồ sơ minh bạch",
+            "Không lo Content ID claim trên mạng xã hội",
+            "Cập nhật nhạc mới hàng tuần",
+            "20.000+ bài nhạc độc quyền AudioBay",
+            "Hỗ trợ kỹ thuật trong giờ hành chính",
+            "App quản lý nhạc trên iOS & Android",
+            "Dashboard web quản lý từ xa",
+            "Lập lịch phát nhạc tự động theo khung giờ",
+            "Playlist tùy chỉnh theo thương hiệu"
+          ],
+          "price_month": 449000,
+          "notes": "3–6 phòng trị liệu, có reception",
+          "name": "Spa vừa",
+          "zones": 2,
+          "area": "50 – 150 m²",
+          "areaMin": 50,
+          "id": "spa-small",
+          "areaMax": 150
+        },
+        {
+          "features": [
+            "Phát nhạc không giới hạn trong không gian được cấp phép",
+            "Giấy phép bản quyền đầy đủ, hồ sơ minh bạch",
+            "Không lo Content ID claim trên mạng xã hội",
+            "Cập nhật nhạc mới hàng tuần",
+            "20.000+ bài nhạc độc quyền AudioBay",
+            "Hỗ trợ kỹ thuật trong giờ hành chính",
+            "App quản lý nhạc trên iOS & Android",
+            "Dashboard web quản lý từ xa",
+            "Lập lịch phát nhạc tự động theo khung giờ",
+            "Playlist tùy chỉnh theo thương hiệu",
+            "Quản lý nhiều khu vực âm thanh (multi-zone)",
+            "Hỗ trợ kỹ thuật ưu tiên — phản hồi trong 8 giờ"
+          ],
+          "price_month": 799000,
+          "name": "Spa lớn",
+          "notes": "6+ phòng, phòng xông hơi, hồ ngâm",
+          "zones": 4,
+          "area": "150 – 400 m²",
+          "areaMin": 150,
+          "id": "spa-medium",
+          "areaMax": 400
+        },
+        {
+          "price_month": 1339000,
+          "area": "> 400 m²",
+          "zones": 8,
+          "features": [
+            "Phát nhạc không giới hạn trong không gian được cấp phép",
+            "Giấy phép bản quyền đầy đủ, hồ sơ minh bạch",
+            "Không lo Content ID claim trên mạng xã hội",
+            "Cập nhật nhạc mới hàng tuần",
+            "20.000+ bài nhạc độc quyền AudioBay",
+            "Hỗ trợ kỹ thuật trong giờ hành chính",
+            "App quản lý nhạc trên iOS & Android",
+            "Dashboard web quản lý từ xa",
+            "Lập lịch phát nhạc tự động theo khung giờ",
+            "Playlist tùy chỉnh theo thương hiệu",
+            "Quản lý nhiều khu vực âm thanh (multi-zone)",
+            "Hỗ trợ kỹ thuật ưu tiên — phản hồi trong 8 giờ"
+          ],
+          "name": "Wellness / Cao cấp",
+          "notes": "Spa resort, wellness center, nhiều khu vực",
+          "areaMin": 400,
+          "id": "spa-premium"
+        }
+      ],
+      "icon": "💆",
+      "id": "spa"
+    },
+    {
+      "icon": "💅",
+      "tiers": [
+        {
+          "area": "≤ 30 m²",
+          "zones": 1,
+          "features": [
+            "Phát nhạc không giới hạn trong không gian được cấp phép",
+            "Giấy phép bản quyền đầy đủ, hồ sơ minh bạch",
+            "Không lo Content ID claim trên mạng xã hội",
+            "Cập nhật nhạc mới hàng tuần",
+            "20.000+ bài nhạc độc quyền AudioBay",
+            "Hỗ trợ kỹ thuật trong giờ hành chính"
+          ],
+          "price_month": 149000,
+          "name": "Nail / Tóc nhỏ",
+          "notes": "Tiệm nail, tóc quy mô nhỏ",
+          "id": "beauty-mini",
+          "areaMax": 30
+        },
+        {
+          "features": [
+            "Phát nhạc không giới hạn trong không gian được cấp phép",
+            "Giấy phép bản quyền đầy đủ, hồ sơ minh bạch",
+            "Không lo Content ID claim trên mạng xã hội",
+            "Cập nhật nhạc mới hàng tuần",
+            "20.000+ bài nhạc độc quyền AudioBay",
+            "Hỗ trợ kỹ thuật trong giờ hành chính"
+          ],
+          "price_month": 269000,
+          "name": "Tiệm làm đẹp",
+          "notes": "Tiệm tóc, nail vừa, có 2–4 nhân viên",
+          "area": "30 – 80 m²",
+          "zones": 1,
+          "id": "beauty-small",
+          "areaMin": 30,
+          "areaMax": 80
+        },
+        {
+          "area": "80 – 200 m²",
+          "zones": 2,
+          "areaMax": 200,
+          "areaMin": 80,
+          "id": "beauty-medium",
+          "price_month": 449000,
+          "features": [
+            "Phát nhạc không giới hạn trong không gian được cấp phép",
+            "Giấy phép bản quyền đầy đủ, hồ sơ minh bạch",
+            "Không lo Content ID claim trên mạng xã hội",
+            "Cập nhật nhạc mới hàng tuần",
+            "20.000+ bài nhạc độc quyền AudioBay",
+            "Hỗ trợ kỹ thuật trong giờ hành chính",
+            "App quản lý nhạc trên iOS & Android",
+            "Dashboard web quản lý từ xa",
+            "Lập lịch phát nhạc tự động theo khung giờ",
+            "Playlist tùy chỉnh theo thương hiệu"
+          ],
+          "notes": "Salon tóc, nail bar có nhiều dịch vụ",
+          "name": "Trung tâm làm đẹp"
+        },
+        {
+          "area": "> 200 m²",
+          "zones": 3,
+          "features": [
+            "Phát nhạc không giới hạn trong không gian được cấp phép",
+            "Giấy phép bản quyền đầy đủ, hồ sơ minh bạch",
+            "Không lo Content ID claim trên mạng xã hội",
+            "Cập nhật nhạc mới hàng tuần",
+            "20.000+ bài nhạc độc quyền AudioBay",
+            "Hỗ trợ kỹ thuật trong giờ hành chính",
+            "App quản lý nhạc trên iOS & Android",
+            "Dashboard web quản lý từ xa",
+            "Lập lịch phát nhạc tự động theo khung giờ",
+            "Playlist tùy chỉnh theo thương hiệu",
+            "Quản lý nhiều khu vực âm thanh (multi-zone)",
+            "Hỗ trợ kỹ thuật ưu tiên — phản hồi trong 8 giờ"
+          ],
+          "price_month": 699000,
+          "notes": "Studio cao cấp, PMU, thẩm mỹ viện",
+          "name": "Beauty Studio",
+          "id": "beauty-premium",
+          "areaMin": 200
+        }
+      ],
+      "id": "beauty",
+      "name": "Beauty & Làm đẹp",
+      "inputType": "area"
+    },
+    {
+      "id": "fitness",
+      "icon": "🏋️",
+      "tiers": [
+        {
+          "zones": 2,
+          "features": [
+            "Phát nhạc không giới hạn trong không gian được cấp phép",
+            "Giấy phép bản quyền đầy đủ, hồ sơ minh bạch",
+            "Không lo Content ID claim trên mạng xã hội",
+            "Cập nhật nhạc mới hàng tuần",
+            "20.000+ bài nhạc độc quyền AudioBay",
+            "Hỗ trợ kỹ thuật trong giờ hành chính",
+            "App quản lý nhạc trên iOS & Android",
+            "Dashboard web quản lý từ xa",
+            "Lập lịch phát nhạc tự động theo khung giờ",
+            "Playlist tùy chỉnh theo thương hiệu"
+          ],
+          "area": "≤ 100 m²",
+          "price_month": 449000,
+          "id": "fit-studio",
+          "name": "Yoga / Pilates Studio",
+          "notes": "Studio nhỏ, 1 phòng tập chính",
+          "areaMax": 100
+        },
+        {
+          "features": [
+            "Phát nhạc không giới hạn trong không gian được cấp phép",
+            "Giấy phép bản quyền đầy đủ, hồ sơ minh bạch",
+            "Không lo Content ID claim trên mạng xã hội",
+            "Cập nhật nhạc mới hàng tuần",
+            "20.000+ bài nhạc độc quyền AudioBay",
+            "Hỗ trợ kỹ thuật trong giờ hành chính",
+            "App quản lý nhạc trên iOS & Android",
+            "Dashboard web quản lý từ xa",
+            "Lập lịch phát nhạc tự động theo khung giờ",
+            "Playlist tùy chỉnh theo thương hiệu",
+            "Quản lý nhiều khu vực âm thanh (multi-zone)",
+            "Hỗ trợ kỹ thuật ưu tiên — phản hồi trong 8 giờ"
+          ],
+          "price_month": 699000,
+          "notes": "Phòng tập có cardio, tạ, phòng thay đồ",
+          "name": "Gym nhỏ",
+          "zones": 3,
+          "area": "100 – 300 m²",
+          "id": "fit-small",
+          "areaMin": 100,
+          "areaMax": 300
+        },
+        {
+          "areaMax": 800,
+          "areaMin": 300,
+          "id": "fit-large",
+          "area": "300 – 800 m²",
+          "zones": 5,
+          "notes": "Gym đa năng, nhiều khu vực tập khác nhau",
+          "name": "Gym lớn",
+          "price_month": 1159000,
+          "features": [
+            "Phát nhạc không giới hạn trong không gian được cấp phép",
+            "Giấy phép bản quyền đầy đủ, hồ sơ minh bạch",
+            "Không lo Content ID claim trên mạng xã hội",
+            "Cập nhật nhạc mới hàng tuần",
+            "20.000+ bài nhạc độc quyền AudioBay",
+            "Hỗ trợ kỹ thuật trong giờ hành chính",
+            "App quản lý nhạc trên iOS & Android",
+            "Dashboard web quản lý từ xa",
+            "Lập lịch phát nhạc tự động theo khung giờ",
+            "Playlist tùy chỉnh theo thương hiệu",
+            "Quản lý nhiều khu vực âm thanh (multi-zone)",
+            "Hỗ trợ kỹ thuật ưu tiên — phản hồi trong 8 giờ"
+          ]
+        },
+        {
+          "areaMin": 800,
+          "id": "fit-complex",
+          "area": "> 800 m²",
+          "zones": 8,
+          "name": "Sports Complex",
+          "notes": "Trung tâm thể thao lớn, nhiều môn",
+          "price_month": null,
+          "contactOnly": true,
+          "features": [
+            "Phát nhạc không giới hạn trong không gian được cấp phép",
+            "Giấy phép bản quyền đầy đủ, hồ sơ minh bạch",
+            "Không lo Content ID claim trên mạng xã hội",
+            "Cập nhật nhạc mới hàng tuần",
+            "20.000+ bài nhạc độc quyền AudioBay",
+            "Hỗ trợ kỹ thuật trong giờ hành chính",
+            "App quản lý nhạc trên iOS & Android",
+            "Dashboard web quản lý từ xa",
+            "Lập lịch phát nhạc tự động theo khung giờ",
+            "Playlist tùy chỉnh theo thương hiệu",
+            "Quản lý nhiều khu vực âm thanh (multi-zone)",
+            "Quản lý nhiều khu vực âm thanh (multi-zone)",
+            "Hỗ trợ kỹ thuật 24/7 — phản hồi trong 4 giờ",
+            "Account Manager chuyên trách",
+            "SLA cam kết uptime 99.9%"
+          ]
+        }
+      ],
+      "name": "Fitness & Gym",
+      "inputType": "area"
+    },
+    {
+      "name": "Y tế & Nha khoa",
+      "tiers": [
+        {
+          "areaMax": 100,
+          "name": "Phòng khám / Nha khoa nhỏ",
+          "notes": "Phòng khám tư, nha khoa 1–3 ghế",
+          "id": "health-small",
+          "price_month": 269000,
+          "area": "≤ 100 m²",
+          "features": [
+            "Phát nhạc không giới hạn trong không gian được cấp phép",
+            "Giấy phép bản quyền đầy đủ, hồ sơ minh bạch",
+            "Không lo Content ID claim trên mạng xã hội",
+            "Cập nhật nhạc mới hàng tuần",
+            "20.000+ bài nhạc độc quyền AudioBay",
+            "Hỗ trợ kỹ thuật trong giờ hành chính"
+          ],
+          "zones": 1
+        },
+        {
+          "name": "Phòng khám vừa",
+          "notes": "Đa khoa nhỏ, phòng chờ + nhiều phòng khám",
+          "price_month": 439000,
+          "features": [
+            "Phát nhạc không giới hạn trong không gian được cấp phép",
+            "Giấy phép bản quyền đầy đủ, hồ sơ minh bạch",
+            "Không lo Content ID claim trên mạng xã hội",
+            "Cập nhật nhạc mới hàng tuần",
+            "20.000+ bài nhạc độc quyền AudioBay",
+            "Hỗ trợ kỹ thuật trong giờ hành chính",
+            "App quản lý nhạc trên iOS & Android",
+            "Dashboard web quản lý từ xa",
+            "Lập lịch phát nhạc tự động theo khung giờ",
+            "Playlist tùy chỉnh theo thương hiệu"
+          ],
+          "areaMax": 300,
+          "id": "health-medium",
+          "areaMin": 100,
+          "area": "100 – 300 m²",
+          "zones": 3
+        },
+        {
+          "areaMin": 300,
+          "id": "health-large",
+          "area": "> 300 m²",
+          "zones": 5,
+          "name": "Đa khoa / Bệnh viện",
+          "notes": "Bệnh viện, phòng khám đa khoa lớn",
+          "price_month": null,
+          "contactOnly": true,
+          "features": [
+            "Phát nhạc không giới hạn trong không gian được cấp phép",
+            "Giấy phép bản quyền đầy đủ, hồ sơ minh bạch",
+            "Không lo Content ID claim trên mạng xã hội",
+            "Cập nhật nhạc mới hàng tuần",
+            "20.000+ bài nhạc độc quyền AudioBay",
+            "Hỗ trợ kỹ thuật trong giờ hành chính",
+            "App quản lý nhạc trên iOS & Android",
+            "Dashboard web quản lý từ xa",
+            "Lập lịch phát nhạc tự động theo khung giờ",
+            "Playlist tùy chỉnh theo thương hiệu",
+            "Quản lý nhiều khu vực âm thanh (multi-zone)",
+            "Quản lý nhiều khu vực âm thanh (multi-zone)",
+            "Hỗ trợ kỹ thuật 24/7 — phản hồi trong 4 giờ",
+            "Account Manager chuyên trách",
+            "SLA cam kết uptime 99.9%"
+          ]
+        }
+      ],
+      "icon": "🏥",
+      "id": "healthcare",
+      "inputType": "area"
+    },
+    {
+      "tiers": [
+        {
+          "features": [
+            "Phát nhạc không giới hạn trong không gian được cấp phép",
+            "Giấy phép bản quyền đầy đủ, hồ sơ minh bạch",
+            "Không lo Content ID claim trên mạng xã hội",
+            "Cập nhật nhạc mới hàng tuần",
+            "20.000+ bài nhạc độc quyền AudioBay",
+            "Hỗ trợ kỹ thuật trong giờ hành chính"
+          ],
+          "zones": 1,
+          "area": "≤ 80 m²",
+          "price_month": 269000,
+          "id": "retail-small",
+          "notes": "Shop thời trang, cửa hàng tạp hóa nhỏ",
+          "name": "Cửa hàng nhỏ",
+          "areaMax": 80
+        },
+        {
+          "price_month": 449000,
+          "features": [
+            "Phát nhạc không giới hạn trong không gian được cấp phép",
+            "Giấy phép bản quyền đầy đủ, hồ sơ minh bạch",
+            "Không lo Content ID claim trên mạng xã hội",
+            "Cập nhật nhạc mới hàng tuần",
+            "20.000+ bài nhạc độc quyền AudioBay",
+            "Hỗ trợ kỹ thuật trong giờ hành chính",
+            "App quản lý nhạc trên iOS & Android",
+            "Dashboard web quản lý từ xa",
+            "Lập lịch phát nhạc tự động theo khung giờ",
+            "Playlist tùy chỉnh theo thương hiệu"
+          ],
+          "notes": "Cửa hàng 2 tầng, boutique, concept store",
+          "name": "Cửa hàng vừa",
+          "zones": 2,
+          "area": "80 – 200 m²",
+          "areaMax": 200,
+          "id": "retail-medium",
+          "areaMin": 80
+        },
+        {
+          "notes": "Chuỗi cửa hàng, flagship store",
+          "name": "Cửa hàng lớn",
+          "price_month": 699000,
+          "features": [
+            "Phát nhạc không giới hạn trong không gian được cấp phép",
+            "Giấy phép bản quyền đầy đủ, hồ sơ minh bạch",
+            "Không lo Content ID claim trên mạng xã hội",
+            "Cập nhật nhạc mới hàng tuần",
+            "20.000+ bài nhạc độc quyền AudioBay",
+            "Hỗ trợ kỹ thuật trong giờ hành chính",
+            "App quản lý nhạc trên iOS & Android",
+            "Dashboard web quản lý từ xa",
+            "Lập lịch phát nhạc tự động theo khung giờ",
+            "Playlist tùy chỉnh theo thương hiệu",
+            "Quản lý nhiều khu vực âm thanh (multi-zone)",
+            "Hỗ trợ kỹ thuật ưu tiên — phản hồi trong 8 giờ"
+          ],
+          "areaMax": 500,
+          "id": "retail-large",
+          "areaMin": 200,
+          "zones": 3,
+          "area": "200 – 500 m²"
+        },
+        {
+          "features": [
+            "Phát nhạc không giới hạn trong không gian được cấp phép",
+            "Giấy phép bản quyền đầy đủ, hồ sơ minh bạch",
+            "Không lo Content ID claim trên mạng xã hội",
+            "Cập nhật nhạc mới hàng tuần",
+            "20.000+ bài nhạc độc quyền AudioBay",
+            "Hỗ trợ kỹ thuật trong giờ hành chính",
+            "App quản lý nhạc trên iOS & Android",
+            "Dashboard web quản lý từ xa",
+            "Lập lịch phát nhạc tự động theo khung giờ",
+            "Playlist tùy chỉnh theo thương hiệu",
+            "Quản lý nhiều khu vực âm thanh (multi-zone)",
+            "Hỗ trợ kỹ thuật ưu tiên — phản hồi trong 8 giờ"
+          ],
+          "zones": 5,
+          "area": "> 500 m²",
+          "price_month": 1159000,
+          "id": "retail-supermarket",
+          "areaMin": 500,
+          "name": "Siêu thị mini",
+          "notes": "Siêu thị mini, cửa hàng tiện lợi lớn"
+        }
+      ],
+      "icon": "🛍️",
+      "id": "retail",
+      "name": "Bán lẻ & Cửa hàng",
+      "inputType": "area"
+    },
+    {
+      "inputType": "area",
+      "tiers": [
+        {
+          "id": "show-small",
+          "notes": "Showroom xe, nội thất, gallery nhỏ",
+          "name": "Showroom nhỏ",
+          "areaMax": 150,
+          "features": [
+            "Phát nhạc không giới hạn trong không gian được cấp phép",
+            "Giấy phép bản quyền đầy đủ, hồ sơ minh bạch",
+            "Không lo Content ID claim trên mạng xã hội",
+            "Cập nhật nhạc mới hàng tuần",
+            "20.000+ bài nhạc độc quyền AudioBay",
+            "Hỗ trợ kỹ thuật trong giờ hành chính",
+            "App quản lý nhạc trên iOS & Android",
+            "Dashboard web quản lý từ xa",
+            "Lập lịch phát nhạc tự động theo khung giờ",
+            "Playlist tùy chỉnh theo thương hiệu"
+          ],
+          "zones": 2,
+          "area": "≤ 150 m²",
+          "price_month": 449000
+        },
+        {
+          "zones": 3,
+          "area": "150 – 500 m²",
+          "areaMax": 500,
+          "id": "show-medium",
+          "areaMin": 150,
+          "price_month": 699000,
+          "features": [
+            "Phát nhạc không giới hạn trong không gian được cấp phép",
+            "Giấy phép bản quyền đầy đủ, hồ sơ minh bạch",
+            "Không lo Content ID claim trên mạng xã hội",
+            "Cập nhật nhạc mới hàng tuần",
+            "20.000+ bài nhạc độc quyền AudioBay",
+            "Hỗ trợ kỹ thuật trong giờ hành chính",
+            "App quản lý nhạc trên iOS & Android",
+            "Dashboard web quản lý từ xa",
+            "Lập lịch phát nhạc tự động theo khung giờ",
+            "Playlist tùy chỉnh theo thương hiệu",
+            "Quản lý nhiều khu vực âm thanh (multi-zone)",
+            "Hỗ trợ kỹ thuật ưu tiên — phản hồi trong 8 giờ"
+          ],
+          "notes": "Showroom thương hiệu, triển lãm vừa",
+          "name": "Showroom vừa"
+        },
+        {
+          "notes": "Trung tâm triển lãm, showroom cao cấp",
+          "name": "Showroom lớn",
+          "areaMin": 500,
+          "id": "show-large",
+          "price_month": 1159000,
+          "area": "> 500 m²",
+          "zones": 5,
+          "features": [
+            "Phát nhạc không giới hạn trong không gian được cấp phép",
+            "Giấy phép bản quyền đầy đủ, hồ sơ minh bạch",
+            "Không lo Content ID claim trên mạng xã hội",
+            "Cập nhật nhạc mới hàng tuần",
+            "20.000+ bài nhạc độc quyền AudioBay",
+            "Hỗ trợ kỹ thuật trong giờ hành chính",
+            "App quản lý nhạc trên iOS & Android",
+            "Dashboard web quản lý từ xa",
+            "Lập lịch phát nhạc tự động theo khung giờ",
+            "Playlist tùy chỉnh theo thương hiệu",
+            "Quản lý nhiều khu vực âm thanh (multi-zone)",
+            "Hỗ trợ kỹ thuật ưu tiên — phản hồi trong 8 giờ"
+          ]
+        },
+        {
+          "price_month": null,
+          "contactOnly": true,
+          "features": [
+            "Phát nhạc không giới hạn trong không gian được cấp phép",
+            "Giấy phép bản quyền đầy đủ, hồ sơ minh bạch",
+            "Không lo Content ID claim trên mạng xã hội",
+            "Cập nhật nhạc mới hàng tuần",
+            "20.000+ bài nhạc độc quyền AudioBay",
+            "Hỗ trợ kỹ thuật trong giờ hành chính",
+            "App quản lý nhạc trên iOS & Android",
+            "Dashboard web quản lý từ xa",
+            "Lập lịch phát nhạc tự động theo khung giờ",
+            "Playlist tùy chỉnh theo thương hiệu",
+            "Quản lý nhiều khu vực âm thanh (multi-zone)",
+            "Quản lý nhiều khu vực âm thanh (multi-zone)",
+            "Hỗ trợ kỹ thuật 24/7 — phản hồi trong 4 giờ",
+            "Account Manager chuyên trách",
+            "SLA cam kết uptime 99.9%"
+          ],
+          "name": "Luxury Showroom",
+          "notes": "Showroom cao cấp quy mô lớn",
+          "area": "> 1.000 m²",
+          "zones": 8,
+          "areaMin": 1000,
+          "id": "show-luxury"
+        }
+      ],
+      "id": "showroom",
+      "icon": "🖼️",
+      "name": "Showroom & Gallery"
+    },
+    {
+      "icon": "🏢",
+      "id": "office",
+      "tiers": [
+        {
+          "name": "Văn phòng nhỏ",
+          "notes": "Văn phòng dưới 20 nhân viên",
+          "id": "off-small",
+          "areaMax": 100,
+          "area": "≤ 100 m²",
+          "zones": 1,
+          "features": [
+            "Phát nhạc không giới hạn trong không gian được cấp phép",
+            "Giấy phép bản quyền đầy đủ, hồ sơ minh bạch",
+            "Không lo Content ID claim trên mạng xã hội",
+            "Cập nhật nhạc mới hàng tuần",
+            "20.000+ bài nhạc độc quyền AudioBay",
+            "Hỗ trợ kỹ thuật trong giờ hành chính"
+          ],
+          "price_month": 269000
+        },
+        {
+          "name": "Văn phòng vừa",
+          "notes": "20–80 nhân viên, có reception và meeting room",
+          "features": [
+            "Phát nhạc không giới hạn trong không gian được cấp phép",
+            "Giấy phép bản quyền đầy đủ, hồ sơ minh bạch",
+            "Không lo Content ID claim trên mạng xã hội",
+            "Cập nhật nhạc mới hàng tuần",
+            "20.000+ bài nhạc độc quyền AudioBay",
+            "Hỗ trợ kỹ thuật trong giờ hành chính",
+            "App quản lý nhạc trên iOS & Android",
+            "Dashboard web quản lý từ xa",
+            "Lập lịch phát nhạc tự động theo khung giờ",
+            "Playlist tùy chỉnh theo thương hiệu"
+          ],
+          "price_month": 439000,
+          "areaMin": 100,
+          "id": "off-medium",
+          "areaMax": 300,
+          "zones": 2,
+          "area": "100 – 300 m²"
+        },
+        {
+          "price_month": 699000,
+          "features": [
+            "Phát nhạc không giới hạn trong không gian được cấp phép",
+            "Giấy phép bản quyền đầy đủ, hồ sơ minh bạch",
+            "Không lo Content ID claim trên mạng xã hội",
+            "Cập nhật nhạc mới hàng tuần",
+            "20.000+ bài nhạc độc quyền AudioBay",
+            "Hỗ trợ kỹ thuật trong giờ hành chính",
+            "App quản lý nhạc trên iOS & Android",
+            "Dashboard web quản lý từ xa",
+            "Lập lịch phát nhạc tự động theo khung giờ",
+            "Playlist tùy chỉnh theo thương hiệu",
+            "Quản lý nhiều khu vực âm thanh (multi-zone)",
+            "Hỗ trợ kỹ thuật ưu tiên — phản hồi trong 8 giờ"
+          ],
+          "notes": "Văn phòng đa khu vực, nhiều tầng",
+          "name": "Văn phòng lớn",
+          "zones": 3,
+          "area": "300 – 1.000 m²",
+          "areaMax": 1000,
+          "id": "off-large",
+          "areaMin": 300
+        },
+        {
+          "isFlexible": true,
+          "price_month": 619000,
+          "area": "Tùy quy mô",
+          "zones": 3,
+          "features": [
+            "Phát nhạc không giới hạn trong không gian được cấp phép",
+            "Giấy phép bản quyền đầy đủ, hồ sơ minh bạch",
+            "Không lo Content ID claim trên mạng xã hội",
+            "Cập nhật nhạc mới hàng tuần",
+            "20.000+ bài nhạc độc quyền AudioBay",
+            "Hỗ trợ kỹ thuật trong giờ hành chính",
+            "App quản lý nhạc trên iOS & Android",
+            "Dashboard web quản lý từ xa",
+            "Lập lịch phát nhạc tự động theo khung giờ",
+            "Playlist tùy chỉnh theo thương hiệu",
+            "Quản lý nhiều khu vực âm thanh (multi-zone)",
+            "Hỗ trợ kỹ thuật ưu tiên — phản hồi trong 8 giờ"
+          ],
+          "notes": "Không gian làm việc chung, cafe & work",
+          "name": "Coworking Space",
+          "id": "off-coworking"
+        }
+      ],
+      "name": "Văn phòng & Coworking",
+      "inputType": "area"
+    },
+    {
+      "icon": "🎪",
+      "tiers": [
+        {
+          "zones": 2,
+          "features": [
+            "Phát nhạc không giới hạn trong không gian được cấp phép",
+            "Giấy phép bản quyền đầy đủ, hồ sơ minh bạch",
+            "Không lo Content ID claim trên mạng xã hội",
+            "Cập nhật nhạc mới hàng tuần",
+            "20.000+ bài nhạc độc quyền AudioBay",
+            "Hỗ trợ kỹ thuật trong giờ hành chính",
+            "App quản lý nhạc trên iOS & Android",
+            "Dashboard web quản lý từ xa",
+            "Lập lịch phát nhạc tự động theo khung giờ",
+            "Playlist tùy chỉnh theo thương hiệu"
+          ],
+          "area": "≤ 200 m²",
+          "price_month": 439000,
+          "id": "evt-studio",
+          "notes": "Studio chụp ảnh, quay phim",
+          "name": "Photo / Video Studio",
+          "areaMax": 200
+        },
+        {
+          "id": "evt-small",
+          "name": "Event Venue nhỏ",
+          "notes": "Không gian tổ chức sự kiện nhỏ",
+          "areaMax": 300,
+          "features": [
+            "Phát nhạc không giới hạn trong không gian được cấp phép",
+            "Giấy phép bản quyền đầy đủ, hồ sơ minh bạch",
+            "Không lo Content ID claim trên mạng xã hội",
+            "Cập nhật nhạc mới hàng tuần",
+            "20.000+ bài nhạc độc quyền AudioBay",
+            "Hỗ trợ kỹ thuật trong giờ hành chính",
+            "App quản lý nhạc trên iOS & Android",
+            "Dashboard web quản lý từ xa",
+            "Lập lịch phát nhạc tự động theo khung giờ",
+            "Playlist tùy chỉnh theo thương hiệu"
+          ],
+          "zones": 3,
+          "area": "≤ 300 m²",
+          "price_month": 619000
+        },
+        {
+          "areaMin": 300,
+          "id": "evt-large",
+          "name": "Event Venue lớn",
+          "notes": "Hội trường, trung tâm sự kiện",
+          "zones": 5,
+          "features": [
+            "Phát nhạc không giới hạn trong không gian được cấp phép",
+            "Giấy phép bản quyền đầy đủ, hồ sơ minh bạch",
+            "Không lo Content ID claim trên mạng xã hội",
+            "Cập nhật nhạc mới hàng tuần",
+            "20.000+ bài nhạc độc quyền AudioBay",
+            "Hỗ trợ kỹ thuật trong giờ hành chính",
+            "App quản lý nhạc trên iOS & Android",
+            "Dashboard web quản lý từ xa",
+            "Lập lịch phát nhạc tự động theo khung giờ",
+            "Playlist tùy chỉnh theo thương hiệu",
+            "Quản lý nhiều khu vực âm thanh (multi-zone)",
+            "Hỗ trợ kỹ thuật ưu tiên — phản hồi trong 8 giờ"
+          ],
+          "area": "> 300 m²",
+          "price_month": 1159000
+        },
+        {
+          "features": [
+            "Phát nhạc không giới hạn trong không gian được cấp phép",
+            "Giấy phép bản quyền đầy đủ, hồ sơ minh bạch",
+            "Không lo Content ID claim trên mạng xã hội",
+            "Cập nhật nhạc mới hàng tuần",
+            "20.000+ bài nhạc độc quyền AudioBay",
+            "Hỗ trợ kỹ thuật trong giờ hành chính",
+            "App quản lý nhạc trên iOS & Android",
+            "Dashboard web quản lý từ xa",
+            "Lập lịch phát nhạc tự động theo khung giờ",
+            "Playlist tùy chỉnh theo thương hiệu",
+            "Quản lý nhiều khu vực âm thanh (multi-zone)",
+            "Quản lý nhiều khu vực âm thanh (multi-zone)",
+            "Hỗ trợ kỹ thuật 24/7 — phản hồi trong 4 giờ",
+            "Account Manager chuyên trách",
+            "SLA cam kết uptime 99.9%"
+          ],
+          "contactOnly": true,
+          "price_month": null,
+          "notes": "Trung tâm hội nghị, ballroom khách sạn",
+          "name": "Convention / Ballroom",
+          "zones": 8,
+          "area": "> 1.000 m²",
+          "areaMin": 1000,
+          "id": "evt-convention"
+        }
+      ],
+      "id": "events",
+      "name": "Sự kiện & Studio",
+      "inputType": "area"
+    },
+    {
+      "inputType": "rooms",
+      "tiers": [
+        {
+          "area": "≤ 30 phòng",
+          "zones": 4,
+          "features": [
+            "Phát nhạc không giới hạn trong không gian được cấp phép",
+            "Giấy phép bản quyền đầy đủ, hồ sơ minh bạch",
+            "Không lo Content ID claim trên mạng xã hội",
+            "Cập nhật nhạc mới hàng tuần",
+            "20.000+ bài nhạc độc quyền AudioBay",
+            "Hỗ trợ kỹ thuật trong giờ hành chính",
+            "App quản lý nhạc trên iOS & Android",
+            "Dashboard web quản lý từ xa",
+            "Lập lịch phát nhạc tự động theo khung giờ",
+            "Playlist tùy chỉnh theo thương hiệu",
+            "Quản lý nhiều khu vực âm thanh (multi-zone)",
+            "Hỗ trợ kỹ thuật ưu tiên — phản hồi trong 8 giờ"
+          ],
+          "price_month": 1339000,
+          "roomsMax": 30,
+          "name": "Khách sạn 1–2 sao",
+          "notes": "Mini hotel, nhà nghỉ có đầu tư",
+          "id": "hotel-1star"
+        },
+        {
+          "features": [
+            "Phát nhạc không giới hạn trong không gian được cấp phép",
+            "Giấy phép bản quyền đầy đủ, hồ sơ minh bạch",
+            "Không lo Content ID claim trên mạng xã hội",
+            "Cập nhật nhạc mới hàng tuần",
+            "20.000+ bài nhạc độc quyền AudioBay",
+            "Hỗ trợ kỹ thuật trong giờ hành chính",
+            "App quản lý nhạc trên iOS & Android",
+            "Dashboard web quản lý từ xa",
+            "Lập lịch phát nhạc tự động theo khung giờ",
+            "Playlist tùy chỉnh theo thương hiệu",
+            "Quản lý nhiều khu vực âm thanh (multi-zone)",
+            "Hỗ trợ kỹ thuật ưu tiên — phản hồi trong 8 giờ"
+          ],
+          "price_month": 2239000,
+          "name": "Khách sạn 3 sao",
+          "notes": "Khách sạn tiêu chuẩn, có nhà hàng",
+          "area": "30 – 80 phòng",
+          "zones": 8,
+          "roomsMax": 80,
+          "id": "hotel-3star",
+          "roomsMin": 30
+        },
+        {
+          "name": "Khách sạn 4 sao",
+          "notes": "Khách sạn cao cấp, đầy đủ tiện ích",
+          "price_month": 3589000,
+          "features": [
+            "Phát nhạc không giới hạn trong không gian được cấp phép",
+            "Giấy phép bản quyền đầy đủ, hồ sơ minh bạch",
+            "Không lo Content ID claim trên mạng xã hội",
+            "Cập nhật nhạc mới hàng tuần",
+            "20.000+ bài nhạc độc quyền AudioBay",
+            "Hỗ trợ kỹ thuật trong giờ hành chính",
+            "App quản lý nhạc trên iOS & Android",
+            "Dashboard web quản lý từ xa",
+            "Lập lịch phát nhạc tự động theo khung giờ",
+            "Playlist tùy chỉnh theo thương hiệu",
+            "Quản lý nhiều khu vực âm thanh (multi-zone)",
+            "Quản lý nhiều khu vực âm thanh (multi-zone)",
+            "Hỗ trợ kỹ thuật 24/7 — phản hồi trong 4 giờ",
+            "Account Manager chuyên trách",
+            "SLA cam kết uptime 99.9%"
+          ],
+          "roomsMin": 80,
+          "roomsMax": 200,
+          "id": "hotel-4star",
+          "area": "80 – 200 phòng",
+          "zones": 15
+        },
+        {
+          "roomsMin": 200,
+          "id": "hotel-5star",
+          "zones": 20,
+          "area": "> 200 phòng",
+          "name": "Khách sạn 5 sao / Resort",
+          "notes": "Resort, khách sạn 5 sao, khu nghỉ dưỡng",
+          "contactOnly": true,
+          "price_month": null,
+          "features": [
+            "Phát nhạc không giới hạn trong không gian được cấp phép",
+            "Giấy phép bản quyền đầy đủ, hồ sơ minh bạch",
+            "Không lo Content ID claim trên mạng xã hội",
+            "Cập nhật nhạc mới hàng tuần",
+            "20.000+ bài nhạc độc quyền AudioBay",
+            "Hỗ trợ kỹ thuật trong giờ hành chính",
+            "App quản lý nhạc trên iOS & Android",
+            "Dashboard web quản lý từ xa",
+            "Lập lịch phát nhạc tự động theo khung giờ",
+            "Playlist tùy chỉnh theo thương hiệu",
+            "Quản lý nhiều khu vực âm thanh (multi-zone)",
+            "Quản lý nhiều khu vực âm thanh (multi-zone)",
+            "Hỗ trợ kỹ thuật 24/7 — phản hồi trong 4 giờ",
+            "Account Manager chuyên trách",
+            "SLA cam kết uptime 99.9%"
+          ]
+        }
+      ],
+      "icon": "🏨",
+      "id": "hotel",
+      "inputLabel": "Số phòng",
+      "name": "Khách sạn & Resort"
+    },
+    {
+      "description": "Dành cho doanh nghiệp có từ 2 địa điểm trở lên. Chọn loại hình địa điểm và nhập số lượng để nhận báo giá tổng.",
+      "inputType": "area",
+      "name": "Chuỗi & Enterprise",
+      "isChain": true,
+      "id": "chain",
+      "tiers": [],
+      "icon": "🏗️"
+    }
+  ],
+  "reviews": [
+    {
+      "content": "Từ ngày chuyển sang dùng AudioBay, quán tôi không còn lo bị phạt bản quyền nhạc nữa. Kho nhạc rất phong phú, phân chia theo đúng gu nhẹ nhàng, thư giãn của cafe sách.",
+      "name": "Nguyễn Minh Tuấn",
+      "avatar": "MT",
+      "rating": 5,
+      "role": "Chủ sáng lập - Cafe Sách Đông Tây"
+    },
+    {
+      "avatar": "TT",
+      "name": "Phạm Thanh Thảo",
+      "content": "Nhạc spa của AudioBay nghe rất thư thái và sang trọng, khách hàng đến trải nghiệm đều khen. Hệ thống tự động phát rất tiện lợi, nhân viên không cần phải mất công chọn bài mỗi ngày.",
+      "role": "Quản lý vận hành - Spa Thảo Mộc Hoa Sữa",
+      "rating": 5
+    },
+    {
+      "rating": 4,
+      "role": "Giám đốc cơ sở - Nha khoa Thẩm mỹ Hà Nội",
+      "name": "Lê Hồng Quân",
+      "avatar": "HQ",
+      "content": "Âm nhạc nhẹ nhàng của AudioBay giúp khách hàng của chúng tôi giảm bớt tâm lý lo lắng khi chờ khám. Dịch vụ hỗ trợ kỹ thuật rất nhanh chóng, thủ tục bản quyền lại rõ ràng và minh bạch."
+    },
+    {
+      "role": "Chủ sở hữu - Boutique Homestay Đà Lạt",
+      "rating": 5,
+      "content": "Tôi cực kỳ ưng ý với danh sách phát acoustic của AudioBay, cực kỳ hợp với không khí se lạnh của Đà Lạt. Nhạc chất lượng cao, không bao giờ bị quảng cáo cắt ngang làm tụt cảm xúc của khách.",
+      "avatar": "DT",
+      "name": "Đặng Minh Triết"
+    }
+  ],
+  "banner": {
+    "text": "🔥 CHÀO HÈ RỰC RỠ: Nhận ngay ưu đãi 14 ngày dùng thử miễn phí và hỗ trợ thiết kế playlist độc quyền cho cơ sở mới!",
+    "enabled": true
+  },
+  "quote_requests": []
+}

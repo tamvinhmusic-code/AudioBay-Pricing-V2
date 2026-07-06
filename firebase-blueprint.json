@@ -1,0 +1,22 @@
+{
+  "entities": {
+    "StoreItem": {
+      "title": "StoreItem",
+      "description": "Represents a configuration block or data item in the central store",
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "object",
+          "description": "The payload data for this configuration key"
+        }
+      },
+      "required": ["data"]
+    }
+  },
+  "firestore": {
+    "store/{key}": {
+      "schema": "StoreItem",
+      "description": "Centralized configuration and data store"
+    }
+  }
+}
