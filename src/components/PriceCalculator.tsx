@@ -104,6 +104,7 @@ interface PriceCalculatorProps {
   onSaveQuoteRequests?: (updated: QuoteRequest[]) => void;
   syncTrigger?: { packageId: string; timestamp: number } | null;
   onOpenAIConsultant?: () => void;
+  airtableConfig?: any;
 }
 
 export default function PriceCalculator({
@@ -114,6 +115,7 @@ export default function PriceCalculator({
   onSaveQuoteRequests,
   syncTrigger,
   onOpenAIConsultant,
+  airtableConfig = { active: false, integrationType: 'api', embedUrl: '' },
 }: PriceCalculatorProps) {
   // State quản lý lựa chọn
   const [selectedCategoryId, setSelectedCategoryId] = useState<string>('cafe');
@@ -127,6 +129,25 @@ export default function PriceCalculator({
   // State cho số zones bổ sung ngoài gói
   const [hasExtraZones, setHasExtraZones] = useState<boolean>(false);
   const [extraZones, setExtraZones] = useState<number>(1);
+  
+  // State Form đặc biệt cho Mô hình Kinh doanh Khác
+  const [customModelForm, setCustomModelForm] = useState({
+    name: '',
+    phone: '',
+    email: '',
+    company: '',
+    modelName: '',
+    scaleValue: 100,
+    scaleLabel: 'm2',
+    branches: 1,
+    zones: 2,
+    paymentCycle: 'yearly' as 'monthly' | 'yearly',
+    notes: ''
+  });
+  const [customFormSubmitting, setCustomFormSubmitting] = useState(false);
+  const [customFormSuccess, setCustomFormSuccess] = useState(false);
+  const [customRequestCode, setCustomRequestCode] = useState('');
+  const [customFormError, setCustomFormError] = useState<string | null>(null);
   
   // State số địa điểm (branches)
   const [branches, setBranches] = useState<number>(1);
@@ -196,11 +217,17 @@ export default function PriceCalculator({
 
   // Lấy Category đang được chọn
   const currentCategory = useMemo(() => {
+    if (selectedCategoryId === 'custom_model') {
+      return { id: 'custom_model', name: 'Mô hình khác...', icon: '❓', isChain: false, inputType: 'area', inputLabel: 'm2', tiers: [], description: 'Mô hình kinh doanh đặc thù tùy chỉnh' } as any;
+    }
     return pricingData.find(c => c.id === selectedCategoryId) || pricingData[0];
   }, [selectedCategoryId, pricingData]);
 
   // Nếu chọn "Chuỗi & Enterprise" -> sử dụng subCategory làm category tính giá
   const activeCalcCategory = useMemo(() => {
+    if (currentCategory.id === 'custom_model') {
+      return currentCategory;
+    }
     if (currentCategory.isChain) {
       return pricingData.find(c => c.id === chainSubCategoryId && !c.isChain) || pricingData[0];
     }
@@ -209,19 +236,29 @@ export default function PriceCalculator({
 
   // Chọn tier tự động
   const selectedTier = useMemo(() => {
+    if (activeCalcCategory.id === 'custom_model') {
+      return { id: 'custom', name: 'Gói tùy chỉnh', zones: 2, price_month: 0, features: [] } as any;
+    }
     return autoSelectTier(activeCalcCategory, inputValue);
   }, [activeCalcCategory, inputValue]);
 
   // Lấy các tính năng động đồng bộ của selectedTier dựa trên tên gói dịch vụ
   const dynamicFeaturesOfSelectedTier = useMemo(() => {
+    if (selectedCategoryId === 'custom_model') {
+      const list = packagesAdmin?.features || defaultPackagesAdmin.features;
+      return list.filter(f => !f.hidden && f.tierFrom === 'business').map(f => f.content);
+    }
     const packageId = getPackageIdForTier(selectedTier);
     const featuresList = packagesAdmin?.features || defaultPackagesAdmin.features;
     return getFeaturesForPackage(featuresList, packageId);
-  }, [packagesAdmin, selectedTier]);
+  }, [packagesAdmin, selectedTier, selectedCategoryId]);
 
   // Cập nhật giá trị mặc định cho slider khi chuyển Category để tránh giá trị ngoài tầm
   const handleCategoryChange = (catId: string) => {
     setSelectedCategoryId(catId);
+    if (catId === 'custom_model') {
+      return;
+    }
     const cat = pricingData.find(c => c.id === catId) || pricingData[0];
     
     if (cat.isChain) {
@@ -336,6 +373,66 @@ export default function PriceCalculator({
     setSubmitSuccess(true);
   };
 
+  // Xử lý gửi yêu cầu tư vấn cho Mô hình khác
+  const handleCustomFormSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!customModelForm.name || !customModelForm.phone || !customModelForm.modelName) {
+      alert('Vui lòng điền đầy đủ Họ tên, Số điện thoại và Tên mô hình kinh doanh!');
+      return;
+    }
+
+    setCustomFormSubmitting(true);
+    setCustomFormError(null);
+
+    try {
+      const today = new Date();
+      const formattedToday = today.toLocaleDateString('vi-VN');
+      const requestCode = `AB-REQ-CUSTOM-${Math.floor(100000 + Math.random() * 900000)}`;
+
+      // Tính chi phí dự kiến tạm tính
+      const baseEstMonthly = customModelForm.branches > 1 ? 449100 : 269100;
+      const estZoneAddon = Math.max(0, customModelForm.zones - 1) * 89000;
+      const estMonthlyTotal = (baseEstMonthly + estZoneAddon) * customModelForm.branches;
+
+      const newRequest: QuoteRequest = {
+        id: requestCode,
+        customerInfo: {
+          name: customModelForm.name,
+          phone: customModelForm.phone,
+          email: customModelForm.email,
+          company: customModelForm.company || customModelForm.modelName,
+          notes: `[Mô hình Khác] Quy mô: ${customModelForm.scaleValue} ${customModelForm.scaleLabel}, Số zones: ${customModelForm.zones}. Chi tiết: ${customModelForm.notes}`,
+        },
+        createdAt: formattedToday,
+        status: 'new',
+        categoryId: 'custom_model',
+        categoryName: `Mô hình khác: ${customModelForm.modelName}`,
+        inputValue: Number(customModelForm.scaleValue),
+        inputLabel: customModelForm.scaleLabel,
+        branches: Number(customModelForm.branches),
+        paymentCycle: customModelForm.paymentCycle,
+        zones: Number(customModelForm.zones),
+        estimatedPriceMonthly: estMonthlyTotal,
+        estimatedPriceYearly: estMonthlyTotal * (customModelForm.paymentCycle === 'yearly' ? 12 : 1),
+      };
+
+      if (onSaveQuoteRequests) {
+        onSaveQuoteRequests([newRequest, ...quoteRequests]);
+      } else {
+        const saved = localStorage.getItem('audiobay_quote_requests');
+        const list = saved ? JSON.parse(saved) : [];
+        localStorage.setItem('audiobay_quote_requests', JSON.stringify([newRequest, ...list]));
+      }
+
+      setCustomRequestCode(requestCode);
+      setCustomFormSuccess(true);
+    } catch (err: any) {
+      setCustomFormError(err.message || 'Đã xảy ra lỗi khi gửi yêu cầu.');
+    } finally {
+      setCustomFormSubmitting(false);
+    }
+  };
+
   return (
     <section id="calculator" className="py-16 bg-[#f5f7ff] border-b border-[#e2e8f5]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -389,7 +486,7 @@ export default function PriceCalculator({
             Bước 1: Chọn mô hình kinh doanh của bạn
           </label>
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
-            {pricingData.map((cat) => {
+            {[...pricingData, { id: 'custom_model', name: 'Mô hình khác...', icon: '❓', isChain: false }].map((cat) => {
               const isSelected = selectedCategoryId === cat.id;
               return (
                 <button
@@ -430,8 +527,294 @@ export default function PriceCalculator({
           </div>
         </div>
 
-        {/* Khối Calculator Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        {/* Khối Calculator Layout hoặc Custom Model Form */}
+        {selectedCategoryId === 'custom_model' ? (
+          <div className="max-w-4xl mx-auto w-full">
+            {airtableConfig.active && airtableConfig.integrationType === 'embed' && airtableConfig.embedUrl ? (
+              /* CHẾ ĐỘ nhúng Airtable Form */
+              <div className="bg-[#ffffff] rounded-3xl border border-[#e2e8f5] shadow-xs overflow-hidden">
+                <div className="bg-[#1a3a7a] p-6 text-white text-center">
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-white/20 text-white text-[10px] font-bold rounded-full uppercase tracking-wider mb-2 font-mono">
+                    Airtable Integration
+                  </span>
+                  <h3 className="text-lg font-black tracking-tight uppercase">Báo Giá Mô Hình Đặc Thù</h3>
+                  <p className="text-xs text-white/80 mt-1 max-w-xl mx-auto">Vui lòng điền thông tin vào biểu mẫu Airtable dưới đây để chuyên viên kinh doanh AudioBay nhận và hỗ trợ tư vấn nhanh nhất.</p>
+                </div>
+                <div className="relative w-full overflow-hidden bg-slate-50" style={{ height: '700px' }}>
+                  <iframe 
+                    src={airtableConfig.embedUrl} 
+                    width="100%" 
+                    height="100%" 
+                    style={{ background: 'transparent', border: 'none' }}
+                    className="w-full h-full"
+                    title="Airtable Form"
+                  />
+                </div>
+                <div className="p-4 bg-slate-50 border-t border-[#e2e8f5] text-center text-xs text-[#8a9ab5]">
+                  Gặp vấn đề hiển thị? <a href={airtableConfig.embedUrl} target="_blank" rel="noopener noreferrer" className="text-indigo-600 font-bold underline hover:text-[#263b96]">Bấm vào đây để mở Form trực tiếp trong tab mới ↗</a>
+                </div>
+              </div>
+            ) : (
+              /* CHẾ ĐỘ Native Form tích hợp đồng bộ API */
+              <div className="bg-[#ffffff] rounded-3xl border border-[#e2e8f5] shadow-xs overflow-hidden text-[#0d1b3e]">
+                <div className="bg-[#1a3a7a] p-6 text-white text-center">
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-white/20 text-white text-[10px] font-bold rounded-full uppercase tracking-wider mb-2 font-mono">
+                    Tư vấn giải pháp đặc thù
+                  </span>
+                  <h3 className="text-lg font-black tracking-tight">YÊU CẦU BÁO GIÁ CHO MÔ HÌNH RIÊNG BIỆT</h3>
+                  <p className="text-xs text-white/80 mt-1 max-w-xl mx-auto">Nếu quý khách có mô hình kinh doanh đặc thù hoặc chuỗi chi nhánh đặc thù chưa được liệt kê sẵn, hãy điền thông tin để chuyên viên AudioBay liên hệ tư vấn nhanh nhất.</p>
+                </div>
+
+                {customFormSuccess ? (
+                  <div className="p-8 text-center space-y-6">
+                    <div className="w-16 h-16 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center mx-auto border border-emerald-200">
+                      <Check className="w-8 h-8 font-extrabold" />
+                    </div>
+                    <div className="space-y-2">
+                      <h4 className="text-lg font-extrabold text-[#0d1b3e]">Gửi yêu cầu thành công!</h4>
+                      <p className="text-xs text-[#5a6d9a] max-w-md mx-auto">Cảm ơn quý khách. Mã yêu cầu của quý khách là <strong className="font-mono text-indigo-600">{customRequestCode}</strong>. Chuyên viên CSKH của AudioBay sẽ liên hệ lại trong vòng 5 phút.</p>
+                    </div>
+                    {airtableConfig.active && (
+                      <p className="text-[11px] text-emerald-600 font-bold">✓ Đã tự động đồng bộ sang bảng quản trị Airtable trung tâm.</p>
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setCustomFormSuccess(false);
+                        setCustomModelForm({
+                          name: '',
+                          phone: '',
+                          email: '',
+                          company: '',
+                          modelName: '',
+                          scaleValue: 100,
+                          scaleLabel: 'm2',
+                          branches: 1,
+                          zones: 2,
+                          paymentCycle: 'yearly',
+                          notes: ''
+                        });
+                      }}
+                      className="px-6 py-2.5 text-xs font-bold text-indigo-600 hover:text-indigo-800 hover:underline bg-transparent border-none cursor-pointer"
+                    >
+                      Tạo yêu cầu mới
+                    </button>
+                  </div>
+                ) : (
+                  <form onSubmit={handleCustomFormSubmit} className="p-6 sm:p-8 space-y-5">
+                    {customFormError && (
+                      <div className="p-3 bg-rose-50 border border-rose-200 rounded-xl text-xs text-rose-700 font-medium">
+                        Lỗi: {customFormError}
+                      </div>
+                    )}
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-xs font-bold text-[#5a6d9a] uppercase tracking-wider mb-1 font-mono">
+                          Họ và tên khách hàng <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          required
+                          placeholder="Ví dụ: Nguyễn Văn A"
+                          value={customModelForm.name}
+                          onChange={(e) => setCustomModelForm(prev => ({ ...prev, name: e.target.value }))}
+                          className="w-full text-sm bg-white border border-[#e2e8f5] text-[#0d1b3e] rounded-xl p-2.5 focus:ring-2 focus:ring-indigo-600 focus:outline-none font-bold"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-bold text-[#5a6d9a] uppercase tracking-wider mb-1 font-mono">
+                          Số điện thoại liên hệ <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="tel"
+                          required
+                          placeholder="Ví dụ: 0912345xxx"
+                          value={customModelForm.phone}
+                          onChange={(e) => setCustomModelForm(prev => ({ ...prev, phone: e.target.value }))}
+                          className="w-full text-sm bg-white border border-[#e2e8f5] text-[#0d1b3e] rounded-xl p-2.5 focus:ring-2 focus:ring-indigo-600 focus:outline-none font-bold font-mono"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-xs font-bold text-[#5a6d9a] uppercase tracking-wider mb-1 font-mono">
+                          Địa chỉ Email
+                        </label>
+                        <input
+                          type="email"
+                          placeholder="Ví dụ: name@company.com"
+                          value={customModelForm.email}
+                          onChange={(e) => setCustomModelForm(prev => ({ ...prev, email: e.target.value }))}
+                          className="w-full text-sm bg-white border border-[#e2e8f5] text-[#0d1b3e] rounded-xl p-2.5 focus:ring-2 focus:ring-indigo-600 focus:outline-none"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-bold text-[#5a6d9a] uppercase tracking-wider mb-1 font-mono">
+                          Tên cơ sở / Tên thương hiệu
+                        </label>
+                        <input
+                          type="text"
+                          placeholder="Ví dụ: Tổ hợp Sáng tạo The Box"
+                          value={customModelForm.company}
+                          onChange={(e) => setCustomModelForm(prev => ({ ...prev, company: e.target.value }))}
+                          className="w-full text-sm bg-white border border-[#e2e8f5] text-[#0d1b3e] rounded-xl p-2.5 focus:ring-2 focus:ring-indigo-600 focus:outline-none font-bold"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="p-4 bg-slate-50 border border-[#e2e8f5] rounded-2xl space-y-4">
+                      <h4 className="text-xs font-bold text-[#0d1b3e] uppercase tracking-wider font-mono">Thông tin về mô hình đặc thù của bạn:</h4>
+                      
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div className="sm:col-span-2">
+                          <label className="block text-[11px] font-bold text-[#5a6d9a] uppercase tracking-wider mb-1 font-mono">
+                            Mô tả mô hình kinh doanh cụ thể <span className="text-red-500">*</span>
+                          </label>
+                          <input
+                            type="text"
+                            required
+                            placeholder="Ví dụ: Sân Pickleball, Phòng tập nhảy, Khu triển lãm tranh..."
+                            value={customModelForm.modelName}
+                            onChange={(e) => setCustomModelForm(prev => ({ ...prev, modelName: e.target.value }))}
+                            className="w-full text-sm bg-white border border-[#e2e8f5] text-[#0d1b3e] rounded-xl p-2.5 focus:ring-2 focus:ring-indigo-600 focus:outline-none font-bold"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-[11px] font-bold text-[#5a6d9a] uppercase tracking-wider mb-1 font-mono">
+                            Đơn vị tính quy mô
+                          </label>
+                          <select
+                            value={customModelForm.scaleLabel}
+                            onChange={(e) => setCustomModelForm(prev => ({ ...prev, scaleLabel: e.target.value }))}
+                            className="w-full text-sm bg-white border border-[#e2e8f5] text-[#0d1b3e] rounded-xl p-2.5 focus:ring-2 focus:ring-indigo-600 focus:outline-none font-bold"
+                          >
+                            <option value="m2">Mét vuông (m²)</option>
+                            <option value="phòng">Phòng nghỉ</option>
+                            <option value="bàn">Bàn</option>
+                            <option value="giường">Giường điều trị</option>
+                            <option value="khu vực">Khu vực riêng biệt</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div>
+                          <label className="block text-[11px] font-bold text-[#5a6d9a] uppercase tracking-wider mb-1 font-mono">
+                            Quy mô không gian (Giá trị số) <span className="text-red-500">*</span>
+                          </label>
+                          <input
+                            type="number"
+                            required
+                            min="1"
+                            value={customModelForm.scaleValue}
+                            onChange={(e) => setCustomModelForm(prev => ({ ...prev, scaleValue: Number(e.target.value) }))}
+                            className="w-full text-sm bg-white border border-[#e2e8f5] text-[#0d1b3e] rounded-xl p-2.5 focus:ring-2 focus:ring-indigo-600 focus:outline-none font-bold font-mono"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-[11px] font-bold text-[#5a6d9a] uppercase tracking-wider mb-1 font-mono">
+                            Số lượng địa điểm đăng ký (Cơ sở) <span className="text-red-500">*</span>
+                          </label>
+                          <input
+                            type="number"
+                            required
+                            min="1"
+                            value={customModelForm.branches}
+                            onChange={(e) => setCustomModelForm(prev => ({ ...prev, branches: Number(e.target.value) }))}
+                            className="w-full text-sm bg-white border border-[#e2e8f5] text-[#0d1b3e] rounded-xl p-2.5 focus:ring-2 focus:ring-indigo-600 focus:outline-none font-bold font-mono"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-[11px] font-bold text-[#5a6d9a] uppercase tracking-wider mb-1 font-mono">
+                            Số khu vực cần phát nhạc riêng biệt <span className="text-red-500">*</span>
+                          </label>
+                          <input
+                            type="number"
+                            required
+                            min="1"
+                            value={customModelForm.zones}
+                            onChange={(e) => setCustomModelForm(prev => ({ ...prev, zones: Number(e.target.value) }))}
+                            className="w-full text-sm bg-white border border-[#e2e8f5] text-[#0d1b3e] rounded-xl p-2.5 focus:ring-2 focus:ring-indigo-600 focus:outline-none font-bold font-mono"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center pt-2">
+                      <div>
+                        <label className="block text-xs font-bold text-[#5a6d9a] uppercase tracking-wider mb-1 font-mono">
+                          Chu kỳ thanh toán đề xuất
+                        </label>
+                        <div className="flex bg-slate-100 p-1 rounded-xl gap-1">
+                          <button
+                            type="button"
+                            onClick={() => setCustomModelForm(prev => ({ ...prev, paymentCycle: 'monthly' }))}
+                            className={`flex-1 py-2 text-xs font-bold rounded-lg transition-colors cursor-pointer border-none ${
+                              customModelForm.paymentCycle === 'monthly'
+                                ? 'bg-white text-[#0d1b3e] shadow-xs'
+                                : 'bg-transparent text-[#5a6d9a] hover:text-[#0d1b3e]'
+                            }`}
+                          >
+                            Hàng tháng
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setCustomModelForm(prev => ({ ...prev, paymentCycle: 'yearly' }))}
+                            className={`flex-1 py-2 text-xs font-bold rounded-lg transition-colors cursor-pointer border-none ${
+                              customModelForm.paymentCycle === 'yearly'
+                                ? 'bg-indigo-600 text-white shadow-xs'
+                                : 'bg-transparent text-[#5a6d9a] hover:text-indigo-600'
+                            }`}
+                          >
+                            Hàng năm (Tiết kiệm 17%)
+                          </button>
+                        </div>
+                      </div>
+                      
+                      <div className="text-xs text-[#5a6d9a] leading-normal pt-4">
+                        💡 <strong>Lợi ích thanh toán năm:</strong> AudioBay miễn phí hoàn toàn 14 ngày dùng thử, tặng trọn gói dịch vụ tư vấn playlist âm nhạc độc quyền cho thương hiệu và chiết khấu thẳng 17% tổng phí.
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold text-[#5a6d9a] uppercase tracking-wider mb-1 font-mono">
+                        Yêu cầu âm nhạc / hạ tầng loa hoặc mô tả chi tiết thêm
+                      </label>
+                      <textarea
+                        rows={3}
+                        placeholder="Ví dụ: Cần nhạc năng động cho sảnh, nhạc dịu nhẹ cho phòng xông hơi, hệ thống loa đang dùng là của Bose..."
+                        value={customModelForm.notes}
+                        onChange={(e) => setCustomModelForm(prev => ({ ...prev, notes: e.target.value }))}
+                        className="w-full text-sm bg-white border border-[#e2e8f5] text-[#0d1b3e] rounded-xl p-2.5 focus:ring-2 focus:ring-indigo-600 focus:outline-none"
+                      />
+                    </div>
+
+                    <div className="pt-4 border-t border-[#e2e8f5] flex items-center justify-between">
+                      <span className="text-[11px] text-[#8a9ab5] font-medium">✓ Đồng bộ tự động thời gian thực tới CSKH AudioBay</span>
+                      <button
+                        type="submit"
+                        disabled={customFormSubmitting}
+                        className="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-black uppercase tracking-wider rounded-xl transition-all shadow-md shadow-indigo-600/20 flex items-center justify-center gap-2 cursor-pointer border-none"
+                      >
+                        {customFormSubmitting ? (
+                          <span>Đang gửi yêu cầu...</span>
+                        ) : (
+                          <>
+                            <Send className="w-3.5 h-3.5" />
+                            Gửi yêu cầu & Liên hệ nhanh
+                          </>
+                        )}
+                      </button>
+                    </div>
+                  </form>
+                )}
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
           {/* CỘT TRÁI: CẤU HÌNH THÔNG SỐ (7 cột) */}
           <div className="lg:col-span-7 bg-[#ffffff] rounded-3xl border border-[#e2e8f5] shadow-xs p-6 sm:p-8 space-y-8 text-[#0d1b3e]">
@@ -944,6 +1327,7 @@ export default function PriceCalculator({
           </div>
 
         </div>
+        )}
 
       </div>
 

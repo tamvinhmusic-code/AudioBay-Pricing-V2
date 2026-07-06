@@ -141,10 +141,18 @@ function initStoreCache() {
       text: '🔥 CHÀO HÈ RỰC RỠ: Nhận ngay ưu đãi 14 ngày dùng thử miễn phí và hỗ trợ thiết kế playlist độc quyền cho cơ sở mới!',
     },
     quote_requests: [],
-    technicians: []
+    technicians: [],
+    airtable_config: {
+      active: false,
+      integrationType: 'api',
+      embedUrl: '',
+      token: '',
+      baseId: '',
+      tableName: ''
+    }
   };
 
-  const allowedKeys = ['company', 'faqs', 'packages', 'pricing', 'reviews', 'banner', 'quote_requests', 'technicians'];
+  const allowedKeys = ['company', 'faqs', 'packages', 'pricing', 'reviews', 'banner', 'quote_requests', 'technicians', 'airtable_config'];
   for (const key of allowedKeys) {
     if (localData && localData[key] !== undefined) {
       memoryStore[key] = localData[key];
@@ -775,7 +783,7 @@ YÊU CẦU QUAN TRỌNG VỀ PHÁP LÝ & TRÁNH BẢN QUYỀN THƯƠNG HIỆU:
  * API: Lấy toàn bộ trạng thái cấu hình và dữ liệu từ Store trung tâm trên máy chủ
  */
 app.get('/api/store', async (req, res) => {
-  const allowedKeys = ['company', 'faqs', 'packages', 'pricing', 'reviews', 'banner', 'quote_requests', 'technicians'];
+  const allowedKeys = ['company', 'faqs', 'packages', 'pricing', 'reviews', 'banner', 'quote_requests', 'technicians', 'airtable_config'];
   const responseStore: Record<string, any> = {};
 
   if (db) {
@@ -830,11 +838,48 @@ app.get('/api/store', async (req, res) => {
 app.post('/api/store/:key', async (req, res) => {
   try {
     const { key } = req.params;
-    const { data } = req.body;
+    let { data } = req.body;
 
-    const allowedKeys = ['company', 'faqs', 'packages', 'pricing', 'reviews', 'banner', 'quote_requests', 'technicians'];
+    const allowedKeys = ['company', 'faqs', 'packages', 'pricing', 'reviews', 'banner', 'quote_requests', 'technicians', 'airtable_config'];
     if (!allowedKeys.includes(key)) {
       return res.status(400).json({ error: 'Mã cấu hình (key) không hợp lệ.' });
+    }
+
+    // Logic Tự động đồng bộ sang Airtable khi có QuoteRequest mới được nộp từ khách hàng
+    if (key === 'quote_requests' && Array.isArray(data)) {
+      const oldRequests = memoryStore['quote_requests'] || [];
+      const airtableConfig = memoryStore['airtable_config'] || {};
+      
+      // Tìm các bản ghi mới hoàn toàn (có ID nằm trong data mới nhưng không nằm trong data cũ)
+      const newRequests = data.filter((newReq: any) => 
+        newReq && newReq.id && !oldRequests.some((oldReq: any) => oldReq && oldReq.id === newReq.id)
+      );
+
+      if (newRequests.length > 0 && airtableConfig.active && airtableConfig.integrationType === 'api') {
+        console.log(`Phát hiện ${newRequests.length} yêu cầu báo giá mới. Tiến hành tự động đồng bộ sang Airtable...`);
+        
+        // Tạo một bản clone của data để cập nhật trạng thái đồng bộ
+        const updatedRequests = [...data];
+        
+        for (const newReq of newRequests) {
+          const syncResult = await syncSingleRequestToAirtable(newReq, airtableConfig);
+          
+          // Cập nhật thuộc tính trạng thái đồng bộ Airtable vào bản ghi
+          const reqIndex = updatedRequests.findIndex((r: any) => r && r.id === newReq.id);
+          if (reqIndex !== -1) {
+            updatedRequests[reqIndex] = {
+              ...updatedRequests[reqIndex],
+              airtableSynced: syncResult.success,
+              airtableRecordId: syncResult.airtableRecordId || null,
+              airtableSyncError: syncResult.success ? null : syncResult.error,
+              airtableSyncTime: new Date().toISOString()
+            };
+          }
+        }
+        
+        // Sử dụng data đã được cập nhật trạng thái đồng bộ để lưu trữ
+        data = updatedRequests;
+      }
     }
 
     // Update in-memory cache and write local file backup
@@ -853,9 +898,248 @@ app.post('/api/store/:key', async (req, res) => {
       }
     }
 
-    res.json({ success: true });
+    res.json({ success: true, data });
   } catch (error: any) {
     res.status(500).json({ error: 'Lỗi khi lưu dữ liệu lên máy chủ.', details: error.message });
+  }
+});
+
+/**
+ * Hàm đồng bộ một yêu cầu báo giá duy nhất sang Airtable qua API
+ */
+async function syncSingleRequestToAirtable(reqData: any, config: any) {
+  if (!config || !config.active || !config.token || !config.baseId || !config.tableName) {
+    return { success: false, error: 'Airtable chưa được kích hoạt hoặc chưa cấu hình đầy đủ thông tin kết nối.' };
+  }
+
+  try {
+    const url = `https://api.airtable.com/v0/${config.baseId}/${config.tableName}`;
+    
+    // Tạo cấu trúc dữ liệu gửi lên Airtable (Hỗ trợ tên trường linh hoạt tiếng Việt)
+    const fields: Record<string, any> = {
+      "Mã Yêu Cầu": reqData.id || "",
+      "Họ Tên": reqData.customerInfo?.name || "",
+      "Số Điện Thoại": reqData.customerInfo?.phone || "",
+      "Email": reqData.customerInfo?.email || "",
+      "Tên Doanh Nghiệp": reqData.customerInfo?.company || "",
+      "Mô Hình": reqData.categoryName || "",
+      "Quy Mô": Number(reqData.inputValue) || 0,
+      "Đơn Vị": reqData.inputLabel || "m2",
+      "Số Zones": Number(reqData.zones) || 1,
+      "Số Chi Nhánh": Number(reqData.branches) || 1,
+      "Chu Kỳ Thanh Toán": reqData.paymentCycle === 'yearly' ? 'Hàng năm' : 'Hàng tháng',
+      "Chi Phí Tháng": Number(reqData.estimatedPriceMonthly) || 0,
+      "Chi Phí Năm": Number(reqData.estimatedPriceYearly) || 0,
+      "Ghi Chú Khách Hàng": reqData.customerInfo?.notes || reqData.customerNotes || "",
+      "Trạng Thái": reqData.status === 'new' ? 'Mới' : (reqData.status === 'processed' ? 'Đã xử lý' : 'Đã từ chối'),
+      "Ngày Tạo": reqData.createdAt || new Date().toLocaleDateString('vi-VN'),
+      "Ghi Chú Admin": reqData.adminNotes || ""
+    };
+
+    let attempt = 0;
+    const maxAttempts = 20;
+
+    while (attempt < maxAttempts) {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${config.token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          records: [{ fields }]
+        })
+      });
+
+      if (response.ok) {
+        const resJson = await response.json();
+        return { success: true, airtableRecordId: resJson.records?.[0]?.id };
+      }
+
+      const errText = await response.text();
+      let isUnknownField = false;
+      let unknownFieldName = '';
+
+      try {
+        const errJson = JSON.parse(errText);
+        if (errJson.error && errJson.error.type === 'UNKNOWN_FIELD_NAME') {
+          isUnknownField = true;
+          const match = errJson.error.message.match(/Unknown field name: "([^"]+)"/);
+          if (match && match[1]) {
+            unknownFieldName = match[1];
+          }
+        }
+      } catch (e) {
+        // Không phải JSON
+      }
+
+      if (isUnknownField && unknownFieldName) {
+        console.warn(`[Airtable Sync] Tên cột không tồn tại trên Airtable: "${unknownFieldName}". Đang tự động loại bỏ cột này và thử lại...`);
+        delete fields[unknownFieldName];
+        attempt++;
+        continue;
+      }
+
+      throw new Error(`Lỗi Airtable API (${response.status}): ${errText}`);
+    }
+
+    throw new Error('Đồng bộ thất bại sau khi loại bỏ quá nhiều cột không hợp lệ.');
+  } catch (err: any) {
+    console.error(`Lỗi đồng bộ yêu cầu ${reqData?.id} lên Airtable:`, err.message);
+    return { success: false, error: err.message };
+  }
+}
+
+/**
+ * API: Đồng bộ thủ công một yêu cầu báo giá bất kỳ lên Airtable
+ */
+app.post('/api/airtable/sync-manual', async (req, res) => {
+  try {
+    const { requestId } = req.body;
+    if (!requestId) {
+      return res.status(400).json({ error: 'Mã yêu cầu (requestId) không được để trống.' });
+    }
+
+    const airtableConfig = memoryStore['airtable_config'] || {};
+    if (!airtableConfig.active) {
+      return res.status(400).json({ error: 'Tích hợp Airtable chưa được kích hoạt trong phần cài đặt!' });
+    }
+
+    const requests = memoryStore['quote_requests'] || [];
+    const reqIndex = requests.findIndex((r: any) => r && r.id === requestId);
+    if (reqIndex === -1) {
+      return res.status(404).json({ error: 'Không tìm thấy yêu cầu báo giá tương ứng trên hệ thống.' });
+    }
+
+    const requestToSync = requests[reqIndex];
+    const syncResult = await syncSingleRequestToAirtable(requestToSync, airtableConfig);
+
+    // Cập nhật lại trạng thái đồng bộ vào danh sách
+    requests[reqIndex] = {
+      ...requests[reqIndex],
+      airtableSynced: syncResult.success,
+      airtableRecordId: syncResult.airtableRecordId || null,
+      airtableSyncError: syncResult.success ? null : syncResult.error,
+      airtableSyncTime: new Date().toISOString()
+    };
+
+    memoryStore['quote_requests'] = requests;
+    saveStore(memoryStore);
+
+    if (db) {
+      const docRef = doc(db, 'store', 'quote_requests');
+      await setDoc(docRef, { data: requests }).catch(err => console.error('Lỗi lưu quote_requests lên Firestore:', err));
+    }
+
+    if (syncResult.success) {
+      res.json({ success: true, message: 'Đồng bộ dữ liệu sang Airtable thành công!', recordId: syncResult.airtableRecordId });
+    } else {
+      res.status(400).json({ error: 'Đồng bộ thất bại.', details: syncResult.error });
+    }
+  } catch (error: any) {
+    res.status(500).json({ error: 'Lỗi máy chủ khi thực hiện đồng bộ.', details: error.message });
+  }
+});
+
+/**
+ * API: Kiểm tra kết nối thử nghiệm tới Airtable
+ */
+app.post('/api/airtable/test-connection', async (req, res) => {
+  try {
+    const { token, baseId, tableName } = req.body;
+    if (!token || !baseId || !tableName) {
+      return res.status(400).json({ error: 'Vui lòng cung cấp đầy đủ Token, Base ID và Table Name để kiểm tra kết nối.' });
+    }
+
+    const url = `https://api.airtable.com/v0/${baseId}/${tableName}`;
+    
+    // Gửi bản ghi thử nghiệm
+    const fields: Record<string, any> = {
+      "Mã Yêu Cầu": "TEST-CONNECTION",
+      "Họ Tên": "Hệ thống kiểm tra AudioBay",
+      "Tên Doanh Nghiệp": "AudioBay Test Connection",
+      "Ghi Chú Admin": "Kết nối thử nghiệm thành công!"
+    };
+
+    console.log(`Đang chạy kiểm tra kết nối tới Airtable: ${url}...`);
+    let attempt = 0;
+    const maxAttempts = 10;
+    let createdRecordId: string | null = null;
+    let lastError: string | null = null;
+
+    while (attempt < maxAttempts) {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          records: [{ fields }]
+        })
+      });
+
+      if (response.ok) {
+        const resJson = await response.json();
+        createdRecordId = resJson.records?.[0]?.id || null;
+        break;
+      }
+
+      const errText = await response.text();
+      let isUnknownField = false;
+      let unknownFieldName = '';
+
+      try {
+        const errJson = JSON.parse(errText);
+        if (errJson.error && errJson.error.type === 'UNKNOWN_FIELD_NAME') {
+          isUnknownField = true;
+          const match = errJson.error.message.match(/Unknown field name: "([^"]+)"/);
+          if (match && match[1]) {
+            unknownFieldName = match[1];
+          }
+        }
+      } catch (e) {}
+
+      if (isUnknownField && unknownFieldName) {
+        console.warn(`[Airtable Test Connection] Loại bỏ cột không tồn tại: "${unknownFieldName}" và thử lại...`);
+        delete fields[unknownFieldName];
+        attempt++;
+        continue;
+      }
+
+      lastError = `Mã lỗi từ Airtable API: ${response.status}. Chi tiết: ${errText}`;
+      break;
+    }
+
+    if (!createdRecordId && lastError) {
+      return res.status(400).json({ 
+        success: false, 
+        error: `Không thể kết nối Airtable. ${lastError}`
+      });
+    }
+
+    if (!createdRecordId && !lastError) {
+      return res.status(400).json({
+        success: false,
+        error: `Không thể kết nối Airtable. Đã thử dọn dẹp các cột nhưng bảng vẫn không chấp nhận bản ghi.`
+      });
+    }
+
+    // Xóa ngay bản ghi thử nghiệm đó đi để giữ bảng sạch sẽ
+    if (createdRecordId) {
+      console.log(`Đã tạo bản ghi test thành công (ID: ${createdRecordId}). Tiến hành dọn dẹp xóa bản ghi test...`);
+      const deleteUrl = `${url}/${createdRecordId}`;
+      await fetch(deleteUrl, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      }).catch(err => console.error('Lỗi khi dọn dẹp bản ghi test Airtable:', err.message));
+    }
+
+    res.json({ success: true, message: 'Kết nối tới Airtable thành công và bảng đã sẵn sàng tiếp nhận dữ liệu!' });
+  } catch (error: any) {
+    res.status(500).json({ error: 'Lỗi máy chủ khi kiểm tra kết nối Airtable.', details: error.message });
   }
 });
 

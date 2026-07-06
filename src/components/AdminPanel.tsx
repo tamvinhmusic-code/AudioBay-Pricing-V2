@@ -45,7 +45,9 @@ import {
   Key,
   Copy,
   LockKeyhole,
-  Shield
+  Shield,
+  Database,
+  Wifi
 } from 'lucide-react';
 import { COMPANY, INTERNAL_GUIDE, INITIAL_FAQS, defaultPackagesAdmin, CATEGORIES, INITIAL_TESTIMONIALS } from '../initialData';
 import { PackagesAdminData, PackageCardConfig, FeatureRow, Category, Tier, QuoteRequest, QuoteParams, Technician } from '../types';
@@ -70,6 +72,8 @@ interface AdminPanelProps {
   onSaveQuoteRequests?: (updated: QuoteRequest[]) => void;
   technicians?: any[];
   onSaveTechnicians?: (updated: any[]) => void;
+  airtableConfig?: any;
+  onAirtableConfigUpdate?: (updated: any) => void;
 }
 
 const formatVND = (num: number): string => {
@@ -92,7 +96,9 @@ export default function AdminPanel({
   quoteRequests = [],
   onSaveQuoteRequests,
   technicians = [],
-  onSaveTechnicians
+  onSaveTechnicians,
+  airtableConfig = { active: false, integrationType: 'api', embedUrl: '', apiKey: '', baseId: '', tableName: '' },
+  onAirtableConfigUpdate,
 }: AdminPanelProps) {
   // Trạng thái hiển thị modal admin chính
   const [isOpen, setIsOpen] = useState<boolean>(() => {
@@ -200,6 +206,14 @@ export default function AdminPanel({
   const [editedPackagesAdmin, setEditedPackagesAdmin] = useState<PackagesAdminData>(packagesAdmin);
   const [editedPricingData, setEditedPricingData] = useState<Category[]>(pricingData);
   const [editedReviews, setEditedReviews] = useState<any[]>(reviews);
+  const [editedAirtableConfig, setEditedAirtableConfig] = useState<any>(() => airtableConfig || {
+    active: false,
+    integrationType: 'api',
+    embedUrl: '',
+    token: '',
+    baseId: '',
+    tableName: ''
+  });
 
   // Sync state của các trường chỉnh sửa mỗi khi modal mở ra hoặc dữ liệu gốc thay đổi
   useEffect(() => {
@@ -210,8 +224,16 @@ export default function AdminPanel({
       setEditedPackagesAdmin(packagesAdmin);
       setEditedPricingData(pricingData);
       setEditedReviews(reviews);
+      setEditedAirtableConfig(airtableConfig || {
+        active: false,
+        integrationType: 'api',
+        embedUrl: '',
+        token: '',
+        baseId: '',
+        tableName: ''
+      });
     }
-  }, [isOpen, company, faqs, banner, packagesAdmin, pricingData, reviews]);
+  }, [isOpen, company, faqs, banner, packagesAdmin, pricingData, reviews, airtableConfig]);
 
   // Quản lý Category đang chỉnh sửa trong Tab 2
   const [selectedCatIdToEdit, setSelectedCatIdToEdit] = useState<string>('cafe');
@@ -228,6 +250,11 @@ export default function AdminPanel({
 
   // Quản lý sub-tab cho Tab 5 (Đánh giá & FAQ)
   const [tab5SubMode, setTab5SubMode] = useState<'reviews' | 'faqs'>('reviews');
+
+  // Trạng thái kiểm tra kết nối & lưu Airtable
+  const [isTestingAirtable, setIsTestingAirtable] = useState(false);
+  const [airtableTestResult, setAirtableTestResult] = useState<{ success: boolean; message: string } | null>(null);
+  const [showAirtableToken, setShowAirtableToken] = useState(false);
 
   // Trạng thái đổi mật khẩu trong Tab 7
   const [oldPassword, setOldPassword] = useState<string>('');
@@ -1236,6 +1263,54 @@ export default function AdminPanel({
         );
       }
     );
+  };
+
+  // Lưu cấu hình Airtable
+  const handleSaveAirtableConfig = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (onAirtableConfigUpdate) {
+      onAirtableConfigUpdate(editedAirtableConfig);
+      showCustomAlert('Thành công', '✅ Lưu cấu hình tích hợp Airtable thành công!');
+    }
+  };
+
+  // Kiểm tra kết nối thử nghiệm tới Airtable
+  const handleTestAirtableConnection = async () => {
+    if (!editedAirtableConfig.token || !editedAirtableConfig.baseId || !editedAirtableConfig.tableName) {
+      showCustomAlert('Thiếu thông tin', '✕ Vui lòng điền đầy đủ các trường: Personal Access Token (PAT), Base ID và Table Name để tiến hành thử nghiệm!');
+      return;
+    }
+
+    setIsTestingAirtable(true);
+    setAirtableTestResult(null);
+
+    try {
+      const response = await fetch('/api/airtable/test-connection', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          token: editedAirtableConfig.token,
+          baseId: editedAirtableConfig.baseId,
+          tableName: editedAirtableConfig.tableName
+        })
+      });
+
+      const resData = await response.json();
+      if (response.ok && resData.success) {
+        setAirtableTestResult({ success: true, message: resData.message });
+        showCustomAlert('Thành công', '✅ ' + resData.message);
+      } else {
+        const errorMsg = resData.error || 'Kiểm tra kết nối thất bại.';
+        setAirtableTestResult({ success: false, message: errorMsg });
+        showCustomAlert('Lỗi kết nối', '✕ ' + errorMsg + (resData.details ? `\nChi tiết: ${resData.details}` : ''));
+      }
+    } catch (err: any) {
+      const errMsg = err.message || 'Lỗi không xác định.';
+      setAirtableTestResult({ success: false, message: errMsg });
+      showCustomAlert('Lỗi', '✕ Lỗi kết nối tới máy chủ kiểm thử: ' + errMsg);
+    } finally {
+      setIsTestingAirtable(false);
+    }
   };
 
   return (
@@ -4225,6 +4300,197 @@ export default function AdminPanel({
                                 />
                               </label>
                             </div>
+                          </div>
+
+                          {/* Khối 2.5: Cấu hình Airtable */}
+                          <div className="bg-[#18181b] rounded-2xl border border-[#27272a] p-5 space-y-4 text-left">
+                            <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-[#27272a] pb-2 gap-2">
+                              <h5 className="text-xs font-black uppercase tracking-wider text-indigo-400 font-mono flex items-center gap-2">
+                                <Database className="w-4 h-4 text-indigo-400" /> 🔌 CẤU HÌNH TÍCH HỢP AIRTABLE
+                              </h5>
+                              <div className="flex items-center gap-2">
+                                <span className="text-[10px] text-[#a1a1aa] font-mono uppercase">Trạng thái:</span>
+                                <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${editedAirtableConfig.active ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/20' : 'bg-zinc-800 text-[#a1a1aa] border border-[#27272a]'}`}>
+                                  {editedAirtableConfig.active ? 'Đang kích hoạt' : 'Đang tắt'}
+                                </span>
+                              </div>
+                            </div>
+                            
+                            <p className="text-xs text-[#a1a1aa] leading-relaxed">
+                              Đồng bộ tự động thông tin khách hàng từ yêu cầu báo giá mô hình riêng biệt sang bảng dữ liệu Airtable của bạn. Hỗ trợ cả 2 phương thức: Nhúng Form Airtable trực tiếp thay thế Native Form hoặc Đồng bộ qua API thời gian thực.
+                            </p>
+
+                            <form onSubmit={handleSaveAirtableConfig} className="space-y-4">
+                              {/* Switch Bật/Tắt */}
+                              <div className="flex items-center justify-between p-3 bg-[#09090b] rounded-xl border border-[#27272a]">
+                                <div className="space-y-0.5">
+                                  <label htmlFor="airtable-active" className="text-xs font-bold text-white cursor-pointer">
+                                    Kích hoạt tích hợp Airtable
+                                  </label>
+                                  <p className="text-[10px] text-[#a1a1aa]">
+                                    Bật tính năng kết nối và đồng bộ dữ liệu với Airtable
+                                  </p>
+                                </div>
+                                <button
+                                  type="button"
+                                  id="airtable-active"
+                                  onClick={() => setEditedAirtableConfig({ ...editedAirtableConfig, active: !editedAirtableConfig.active })}
+                                  className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${editedAirtableConfig.active ? 'bg-indigo-600' : 'bg-zinc-800'}`}
+                                >
+                                  <span
+                                    className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${editedAirtableConfig.active ? 'translate-x-5' : 'translate-x-0'}`}
+                                  />
+                                </button>
+                              </div>
+
+                              {editedAirtableConfig.active && (
+                                <div className="space-y-4 animate-fadeIn">
+                                  {/* Loại tích hợp */}
+                                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                    <button
+                                      type="button"
+                                      onClick={() => setEditedAirtableConfig({ ...editedAirtableConfig, integrationType: 'api' })}
+                                      className={`p-3 rounded-xl border text-left transition-all cursor-pointer flex flex-col justify-between ${editedAirtableConfig.integrationType === 'api' ? 'bg-indigo-950/20 border-indigo-500/50 text-white' : 'bg-[#09090b] border-[#27272a] text-[#a1a1aa] hover:border-[#3f3f46]'}`}
+                                    >
+                                      <div className="text-xs font-bold flex items-center gap-1.5 text-white mb-1">
+                                        <Wifi className="w-3.5 h-3.5 text-indigo-400" /> API Realtime Sync
+                                      </div>
+                                      <span className="text-[10px] text-[#a1a1aa] leading-normal">
+                                        Đồng bộ thời gian thực từ Native Form của Web lên Airtable qua API
+                                      </span>
+                                    </button>
+
+                                    <button
+                                      type="button"
+                                      onClick={() => setEditedAirtableConfig({ ...editedAirtableConfig, integrationType: 'embed' })}
+                                      className={`p-3 rounded-xl border text-left transition-all cursor-pointer flex flex-col justify-between ${editedAirtableConfig.integrationType === 'embed' ? 'bg-indigo-950/20 border-indigo-500/50 text-white' : 'bg-[#09090b] border-[#27272a] text-[#a1a1aa] hover:border-[#3f3f46]'}`}
+                                    >
+                                      <div className="text-xs font-bold flex items-center gap-1.5 text-white mb-1">
+                                        <Database className="w-3.5 h-3.5 text-indigo-400" /> Embed Airtable Form
+                                      </div>
+                                      <span className="text-[10px] text-[#a1a1aa] leading-normal">
+                                        Nhúng trực tiếp iframe Form từ Airtable thay thế biểu mẫu liên hệ
+                                      </span>
+                                    </button>
+                                  </div>
+
+                                  {/* Trường cho API */}
+                                  {editedAirtableConfig.integrationType === 'api' && (
+                                    <div className="space-y-3 bg-[#09090b] p-4 rounded-xl border border-[#27272a] animate-fadeIn">
+                                      <div className="space-y-1">
+                                        <label className="text-[10px] font-black uppercase tracking-wider text-indigo-400 font-mono">
+                                          Personal Access Token (PAT)
+                                        </label>
+                                        <div className="relative">
+                                          <input
+                                            type={showAirtableToken ? 'text' : 'password'}
+                                            value={editedAirtableConfig.token || ''}
+                                            onChange={(e) => setEditedAirtableConfig({ ...editedAirtableConfig, token: e.target.value })}
+                                            placeholder="pat... hoặc key... từ tài khoản Airtable của bạn"
+                                            className="w-full bg-[#18181b] border border-[#27272a] rounded-lg px-3 py-2 text-xs font-mono text-white placeholder-zinc-600 focus:outline-none focus:border-indigo-500 pr-10"
+                                          />
+                                          <button
+                                            type="button"
+                                            onClick={() => setShowAirtableToken(!showAirtableToken)}
+                                            className="absolute right-2 top-1.5 text-zinc-500 hover:text-white transition-colors"
+                                          >
+                                            {showAirtableToken ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                                          </button>
+                                        </div>
+                                      </div>
+
+                                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                        <div className="space-y-1">
+                                          <label className="text-[10px] font-black uppercase tracking-wider text-indigo-400 font-mono">
+                                            Base ID
+                                          </label>
+                                          <input
+                                            type="text"
+                                            value={editedAirtableConfig.baseId || ''}
+                                            onChange={(e) => setEditedAirtableConfig({ ...editedAirtableConfig, baseId: e.target.value })}
+                                            placeholder="appXyz123..."
+                                            className="w-full bg-[#18181b] border border-[#27272a] rounded-lg px-3 py-2 text-xs font-mono text-white placeholder-zinc-600 focus:outline-none focus:border-indigo-500"
+                                          />
+                                        </div>
+                                        <div className="space-y-1">
+                                          <label className="text-[10px] font-black uppercase tracking-wider text-indigo-400 font-mono">
+                                            Table Name
+                                          </label>
+                                          <input
+                                            type="text"
+                                            value={editedAirtableConfig.tableName || ''}
+                                            onChange={(e) => setEditedAirtableConfig({ ...editedAirtableConfig, tableName: e.target.value })}
+                                            placeholder="Yêu cầu báo giá"
+                                            className="w-full bg-[#18181b] border border-[#27272a] rounded-lg px-3 py-2 text-xs font-mono text-white placeholder-zinc-600 focus:outline-none focus:border-indigo-500"
+                                          />
+                                        </div>
+                                      </div>
+
+                                      {/* Gợi ý tên cột */}
+                                      <div className="p-3 bg-zinc-900/50 rounded-lg border border-zinc-800 space-y-1">
+                                        <span className="text-[10px] font-bold text-indigo-300 block">💡 Gợi ý cấu trúc cột trong Airtable để khớp tự động:</span>
+                                        <p className="text-[9px] text-[#a1a1aa] leading-relaxed">
+                                          Để đồng bộ chính xác, bạn hãy tạo các cột (Fields) trong bảng Airtable với tên chính xác như sau: <code className="text-white font-mono bg-zinc-800 px-1 py-0.5 rounded">Mã Yêu Cầu</code>, <code className="text-white font-mono bg-zinc-800 px-1 py-0.5 rounded">Họ Tên</code>, <code className="text-white font-mono bg-zinc-800 px-1 py-0.5 rounded">Số Điện Thoại</code>, <code className="text-white font-mono bg-zinc-800 px-1 py-0.5 rounded">Email</code>, <code className="text-white font-mono bg-zinc-800 px-1 py-0.5 rounded">Tên Doanh Nghiệp</code>, <code className="text-white font-mono bg-zinc-800 px-1 py-0.5 rounded">Mô Hình</code>, <code className="text-white font-mono bg-zinc-800 px-1 py-0.5 rounded">Quy Mô</code>, <code className="text-white font-mono bg-zinc-800 px-1 py-0.5 rounded">Đơn Vị</code>, <code className="text-white font-mono bg-zinc-800 px-1 py-0.5 rounded">Số Zones</code>, <code className="text-white font-mono bg-zinc-800 px-1 py-0.5 rounded">Số Chi Nhánh</code>, <code className="text-white font-mono bg-zinc-800 px-1 py-0.5 rounded">Chu Kỳ Thanh Toán</code>, <code className="text-white font-mono bg-zinc-800 px-1 py-0.5 rounded">Chi Phí Tháng</code>, <code className="text-white font-mono bg-zinc-800 px-1 py-0.5 rounded">Chi Phí Năm</code>, <code className="text-white font-mono bg-zinc-800 px-1 py-0.5 rounded">Ghi Chú Khách Hàng</code>, <code className="text-white font-mono bg-zinc-800 px-1 py-0.5 rounded">Trạng Thái</code>, <code className="text-white font-mono bg-zinc-800 px-1 py-0.5 rounded">Ngày Tạo</code>.
+                                        </p>
+                                      </div>
+
+                                      {/* Nút Test Connection */}
+                                      <div className="flex items-center justify-between pt-2 border-t border-zinc-800/60">
+                                        <span className="text-[10px] text-[#a1a1aa]">Gửi yêu cầu thử nghiệm tới Airtable</span>
+                                        <button
+                                          type="button"
+                                          disabled={isTestingAirtable}
+                                          onClick={handleTestAirtableConnection}
+                                          className="px-3.5 py-1.5 bg-[#18181b] hover:bg-[#27272a] border border-[#27272a] text-zinc-300 hover:text-white rounded-lg transition-all text-[10px] font-bold flex items-center gap-1.5"
+                                        >
+                                          {isTestingAirtable ? (
+                                            <>
+                                              <RefreshCw className="w-3 h-3 animate-spin text-indigo-400" />
+                                              Đang kết nối...
+                                            </>
+                                          ) : (
+                                            <>
+                                              <Wifi className="w-3 h-3 text-indigo-400" />
+                                              Thử kết nối (Test connection)
+                                            </>
+                                          )}
+                                        </button>
+                                      </div>
+                                    </div>
+                                  )}
+
+                                  {/* Trường cho Embed */}
+                                  {editedAirtableConfig.integrationType === 'embed' && (
+                                    <div className="space-y-3 bg-[#09090b] p-4 rounded-xl border border-[#27272a] animate-fadeIn">
+                                      <div className="space-y-1">
+                                        <label className="text-[10px] font-black uppercase tracking-wider text-indigo-400 font-mono">
+                                          Đường dẫn nhúng Form Airtable (Embed URL)
+                                        </label>
+                                        <input
+                                          type="text"
+                                          value={editedAirtableConfig.embedUrl || ''}
+                                          onChange={(e) => setEditedAirtableConfig({ ...editedAirtableConfig, embedUrl: e.target.value })}
+                                          placeholder="https://airtable.com/embed/shr..."
+                                          className="w-full bg-[#18181b] border border-[#27272a] rounded-lg px-3 py-2 text-xs font-mono text-white placeholder-zinc-600 focus:outline-none focus:border-indigo-500"
+                                        />
+                                        <p className="text-[9px] text-[#a1a1aa] leading-normal">
+                                          Tạo biểu mẫu Form trên Airtable, lấy đường dẫn mã nhúng (Embed link) có dạng <code className="text-zinc-300 font-mono">https://airtable.com/embed/shr...</code> dán vào đây. Form này sẽ tự động thay thế biểu mẫu gốc cho mô hình riêng biệt.
+                                        </p>
+                                      </div>
+                                    </div>
+                                  )}
+                                </div>
+                              )}
+
+                              <div className="pt-2">
+                                <button
+                                  type="submit"
+                                  className="px-5 py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-black text-xs uppercase tracking-wider rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-md"
+                                >
+                                  <Save className="w-4 h-4" /> Lưu cấu hình Airtable
+                                </button>
+                              </div>
+                            </form>
                           </div>
 
                           {/* Khối 3: Reset Factory */}

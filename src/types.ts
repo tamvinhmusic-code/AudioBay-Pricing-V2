@@ -176,7 +176,22 @@ export interface QuoteRequest {
   customPriceMonthly?: number;
   customPriceYearly?: number;
   adminNotes?: string;
-}export interface Technician {
+  airtableSynced?: boolean;
+  airtableRecordId?: string | null;
+  airtableSyncError?: string | null;
+  airtableSyncTime?: string;
+}
+
+export interface AirtableConfig {
+  active: boolean;
+  integrationType: 'embed' | 'api';
+  embedUrl: string;
+  token: string;
+  baseId: string;
+  tableName: string;
+}
+
+export interface Technician {
   id: string;
   email: string;
   fullName: string;

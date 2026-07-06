@@ -145,6 +145,30 @@ export default function App() {
     }
   });
 
+  // Trạng thái cấu hình tích hợp Airtable
+  const [airtableConfig, setAirtableConfig] = useState(() => {
+    try {
+      const saved = localStorage.getItem('audiobay_airtable_config');
+      return saved ? JSON.parse(saved) : {
+        active: false,
+        integrationType: 'api',
+        embedUrl: '',
+        token: '',
+        baseId: '',
+        tableName: ''
+      };
+    } catch {
+      return {
+        active: false,
+        integrationType: 'api',
+        embedUrl: '',
+        token: '',
+        baseId: '',
+        tableName: ''
+      };
+    }
+  });
+
   const [calculatorSyncTrigger, setCalculatorSyncTrigger] = useState<{ packageId: string; timestamp: number } | null>(null);
 
   // Hàm đồng bộ hóa dữ liệu lên máy chủ
@@ -158,6 +182,12 @@ export default function App() {
     } catch (err) {
       console.error(`AudioBay: Sync failed for key '${key}':`, err);
     }
+  };
+
+  const saveAirtableConfig = (updated: any) => {
+    setAirtableConfig(updated);
+    localStorage.setItem('audiobay_airtable_config', JSON.stringify(updated));
+    syncWithServer('airtable_config', updated);
   };
 
   const saveCompany = (updated: any) => {
@@ -259,6 +289,10 @@ export default function App() {
           if (store.technicians) {
             setTechnicians(store.technicians);
             localStorage.setItem('audiobay_technicians', JSON.stringify(store.technicians));
+          }
+          if (store.airtable_config) {
+            setAirtableConfig(store.airtable_config);
+            localStorage.setItem('audiobay_airtable_config', JSON.stringify(store.airtable_config));
           }
           console.log('AudioBay: Successfully synchronized latest store data from central server.');
         }
@@ -409,6 +443,8 @@ export default function App() {
                 onSaveQuoteRequests={saveQuoteRequests}
                 technicians={technicians}
                 onSaveTechnicians={saveTechnicians}
+                airtableConfig={airtableConfig}
+                onAirtableConfigUpdate={saveAirtableConfig}
               />
             </div>
 
@@ -482,6 +518,7 @@ export default function App() {
           quoteRequests={quoteRequests}
           onSaveQuoteRequests={saveQuoteRequests}
           syncTrigger={calculatorSyncTrigger}
+          airtableConfig={airtableConfig}
           onOpenAIConsultant={() => {
             setShowAIConsultant(true);
             setShowAIPrompt(false);
